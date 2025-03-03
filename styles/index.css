@@ -45,29 +45,42 @@ nav a {
     z-index: -1;
 }
 
+#title h1 {
+    color: white;
+    font-size: 2.5rem;
+}
+
+#title p {
+    color: white;
+    font-size: 1.8rem;
+}
+
 .search-card, .results-card {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: absolute;
-    top: 50%;
     transform: translateY(-50%);
 }
 
 .results-card {
+    left: 60%;
+    top: 50%;
+    width: 20%;
+    height: 400px;
+    text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    left: 60%;
-    width: 350px;
-    height: 420px;
+    align-items: center;
 }
 
 .search-card {
     left: 20%;
-    width: 350px;
-    height: 420px;
+    top: 50%;
+    width: 20%;
+    height: 400px;
     text-align: left;
     display: flex;
     flex-direction: column;
@@ -78,7 +91,6 @@ input {
     width: calc(100% - 20px);
     padding: 10px;
     border: 1px solid #ccc;
-    /* margin-bottom: 5px; */
 }
 
 .green {
@@ -90,7 +102,7 @@ input {
 }
 
 .date-picker {
-    margin-top: 10%;
+    margin-top: 0;
 }
 
 button {
@@ -101,7 +113,7 @@ button {
     color: white;
     border: none;
     cursor: pointer;
-    margin-top: 90px;
+    margin-top: 70px;
     font-size: 18px;
     border-radius: 10px;
 }
