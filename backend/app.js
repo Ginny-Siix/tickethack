@@ -5,6 +5,8 @@ var logger = require('morgan');
 
 require('./models/connection');
 
+var tripRouter = require('./routes/trip');
+
 
 var app = express();
 
@@ -16,6 +18,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/trip', tripRouter);
 
 
 
