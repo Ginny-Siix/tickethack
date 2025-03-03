@@ -39,7 +39,7 @@ nav a {
     width: 100%;
     height: 100vh;
     background-color: aquamarine;
-    background-image: url(''); /* Ajouter l'image ici */
+    background-image: url('../images/background.jpg'); /* Ajouter l'image ici */
     background-size: cover;
     background-position: center;
     z-index: -1;
@@ -83,6 +83,10 @@ input {
 
 .green {
     background-color: forestgreen;
+    width: 80%;
+    height: 5px;
+    background-color: green;
+    margin: 0 auto;
 }
 
 .date-picker {
@@ -103,7 +107,7 @@ button {
 }
 
 .train-illustration {
-    width: 100px;
+    width: 200px;
     display: block;
-    margin: 0 auto 10px;
+    margin: 40px auto 10px;
 }
