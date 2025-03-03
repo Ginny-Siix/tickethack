@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    position: relative;
+}
+
+header {
+    background-color: white;
+    color: forestgreen;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+nav {
+    display: flex;
+    gap: 15px;
+}
+
+nav a {
+    color: black;
+    text-decoration: none;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: aquamarine;
+    background-image: url(''); /* Ajouter l'image ici */
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.search-card, .results-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.results-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    left: 60%;
+    width: 350px;
+    height: 420px;
+}
+
+.search-card {
+    left: 20%;
+    width: 350px;
+    height: 420px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    /* margin-bottom: 5px; */
+}
+
+.green {
+    background-color: forestgreen;
+}
+
+.date-picker {
+    margin-top: 10%;
+}
+
+button {
+    display: block;
+    width: 90%;
+    padding: 10px;
+    background-color: forestgreen;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 90px;
+    font-size: 18px;
+    border-radius: 10px;
+}
+
+.train-illustration {
+    width: 100px;
+    display: block;
+    margin: 0 auto 10px;
+}
