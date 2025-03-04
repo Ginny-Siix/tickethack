@@ -28,7 +28,7 @@ router.post('/search', (req, res) => {
         })
             //gte : greater than equal : chercher à partir de cette date là
             .then(data => {
-                console.log('list of departures and arrivals', data);
+                console.log('list departures and arrivals', data);
                 if (data.length >0) {
 
                     res.json({ result: true, trips: data });
