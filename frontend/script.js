@@ -18,7 +18,8 @@ searchButton.addEventListener("click", function () {
   console.log("Bouton cliqué !", departureValue, arrivalValue, dateValue);
 
   if (departureValue === "" || arrivalValue === "" || dateValue === "") {
-    emptyMessage.textContent = "Veuillez renseigner un départ et une arrivée.";
+    emptyMessage.textContent =
+      "Veuillez renseigner un départ, une arrivée et une date de départ.";
     emptyMessage.style.display = "block";
     tripsContainer.innerHTML = "";
     return;
@@ -27,7 +28,11 @@ searchButton.addEventListener("click", function () {
   fetch("http://localhost:3000/trip/search", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({departure: departureValue, arrival: arrivalValue, date: dateValue }),
+    body: JSON.stringify({
+      departure: departureValue,
+      arrival: arrivalValue,
+      date: dateValue,
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -36,38 +41,16 @@ searchButton.addEventListener("click", function () {
         displayTrips(allTrips);
       } else {
         tripsContainer.innerHTML = "";
-        emptyMessage.textContent = "Aucun trajet trouvé.";
-        emptyMessage.style.display = "block";
+        // Ajouter l'image et le message
+        tripsContainer.innerHTML = `
+          <div class="no-trips">
+            <img src="./images/notfound.png" alt="Illustration du train" class="no-trips-img">
+            <p>Aucun trajet disponible</p>
+          </div>`;
+        emptyMessage.style.display = "none"; // Masquer le message d'erreur précédent
       }
     });
 });
-
-// Fonction pour rechercher des trajets avec des filtres
-function searchTrips(departure, arrival) {
-  const url = `http://localhost:3000/trip/search?departure=${encodeURIComponent(
-    departure
-  )}&arrival=${encodeURIComponent(arrival)}`;
-
-  console.log("URL envoyée :", url); // Vérifie l'URL construite
-
-  fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        tripsContainer.innerHTML = ``;
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Données reçues :", data); // Vérifie la réponse du backend
-      if (data.trips && data.trips.length > 0) {
-        displayTrips(data.trips);
-      } else {
-        tripsContainer.innerHTML = "";
-        emptyMessage.textContent = "Aucun trajet trouvé.";
-        emptyMessage.style.display = "block";
-      }
-    });
-}
 
 // Fonction pour afficher les trajets
 function displayTrips(trips) {
@@ -80,8 +63,7 @@ function displayTrips(trips) {
           <p><strong>Arrivée :</strong> ${trip.arrival}</p>
           <p><strong>Date :</strong> ${new Date(trip.date).toLocaleDateString(
             "fr-FR"
-          )}
-          </p>
+          )}</p>
           <button class="add-to-cart" data-id="${trip.departure}-${
       trip.arrival
     }">
@@ -90,5 +72,3 @@ function displayTrips(trips) {
       </div>`;
   });
 }
-
-// Charger les trajets au démarrage (remarque : ce fetch ne les affiche pas directement)
