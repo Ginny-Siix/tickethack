@@ -4,70 +4,92 @@ const emptyMessage = document.getElementById("empty-message");
 const searchButton = document.getElementById("searchButton");
 const departureInput = document.getElementById("departure");
 const arrivalInput = document.getElementById("arrival");
+
 let allTrips = []; // Stocker tous les trajets ici
 
-// Fonction pour charger les trajets depuis l'API
+// Fonction pour charger les trajets au démarrage
 function loadTrips() {
   fetch("http://localhost:3000/trip/search")
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Erreur de chargement des trajets");
+        throw new Error("Erreur lors du chargement des trajets");
       }
       return response.json();
     })
     .then((data) => {
-      if (data.trips) {
-        allTrips = data.trips; // Stocke les trajets pour filtrage
+      console.log("Données chargées :", data); // Vérification
+
+      if (data.trips && data.trips.length > 0) {
+        allTrips = data.trips; // Stocke les trajets
+      } else {
+        allTrips = [];
       }
-    })}
-
-// Fonction pour afficher les trajets
-function displayTrips(trips) {
-  tripsContainer.innerHTML = ""; // Vide la section avant d'ajouter les nouveaux trajets
-
-  if (trips.length === 0) {
-    emptyMessage.style.display = "block"; // Affiche le message si aucun résultat
-  } else {
-    emptyMessage.style.display = "none"; // Cache le message
-  }
-
-  const tripsHTML = trips
-    .map(
-      (trip) => `
-        <div class="trip-item">
-            <p><strong>Départ :</strong> ${trip.departure}</p>
-            <p><strong>Arrivée :</strong> ${trip.arrival}</p>
-            <p><strong>Date :</strong> ${new Date(
-              trip.date.$date
-            ).toLocaleDateString("fr-FR")}</p>
-            <button class="add-to-cart" data-id="${trip.departure}-${
-        trip.arrival
-      }">Ajouter au panier</button>
-        </div>
-    `
-    )
-    .join("");
-
-  tripsContainer.innerHTML = tripsHTML;
-}
-
-// Fonction pour rechercher les trajets
-function searchTrips() {
-  const departureValue = departureInput.value.trim().toLowerCase();
-  const arrivalValue = arrivalInput.value.trim().toLowerCase();
-
-  // Filtrer les trajets selon les entrées
-  const filteredTrips = allTrips.filter(
-    (trip) =>
-      trip.departure.toLowerCase().includes(departureValue) &&
-      trip.arrival.toLowerCase().includes(arrivalValue)
-  );
-
-  displayTrips(filteredTrips);
+    })
+    .catch((error) => console.error("Erreur :", error));
 }
 
 // Événement pour lancer la recherche
-searchButton.addEventListener("click", searchTrips);
+searchButton.addEventListener("click", function () {
+  const departureValue = departureInput.value.trim().toLowerCase();
+  const arrivalValue = arrivalInput.value.trim().toLowerCase();
+  console.log("Bouton cliqué !", departureValue, arrivalValue);
 
-// Charger les trajets au démarrage de la page sans les afficher
+  if (departureValue === "" || arrivalValue === "") {
+    emptyMessage.textContent = "Veuillez renseigner un départ et une arrivée.";
+    emptyMessage.style.display = "block";
+    tripsContainer.innerHTML = "";
+    return;
+  }
+
+  emptyMessage.style.display = "none"; // Cache le message d'erreur
+  searchTrips(departureValue, arrivalValue); // Lancer la recherche
+});
+
+// Fonction pour rechercher des trajets avec des filtres
+function searchTrips(departure, arrival) {
+  const url = `http://localhost:3000/trip/search?departure=${encodeURIComponent(departure)}&arrival=${encodeURIComponent(arrival)}`;
+  
+  console.log("URL envoyée :", url); // Vérifie l'URL construite
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        tripsContainer.innerHTML=``;
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Données reçues :", data); // Vérifie la réponse du backend
+      if (data.trips && data.trips.length > 0) {
+        displayTrips(data.trips);
+      } else {
+        tripsContainer.innerHTML = "";
+        emptyMessage.textContent = "Aucun trajet trouvé.";
+        emptyMessage.style.display = "block";
+      }
+    })
+}
+
+// Fonction pour afficher les trajets
+function displayTrips(trips) {
+  tripsContainer.innerHTML = ""; // Vide l'affichage avant d'ajouter les nouveaux trajets
+
+  trips.forEach((trip) => {
+    tripsContainer.innerHTML += `
+      <div class="trip-item">
+          <p><strong>Départ :</strong> ${trip.departure}</p>
+          <p><strong>Arrivée :</strong> ${trip.arrival}</p>
+          <p><strong>Date :</strong> ${new Date(trip.date).toLocaleDateString(
+            "fr-FR"
+          )}</p>
+          <button class="add-to-cart" data-id="${trip.departure}-${
+      trip.arrival
+    }">
+            Ajouter au panier
+          </button>
+      </div>`;
+  });
+}
+
+// Charger les trajets au démarrage (remarque : ce fetch ne les affiche pas directement)
 loadTrips();
