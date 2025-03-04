@@ -6,9 +6,9 @@ const departureInput = document.getElementById("departure");
 const arrivalInput = document.getElementById("arrival");
 let allTrips = []; // Stocker tous les trajets ici
 
-// Fonction pour charger les trajets depuis trips.json
+// Fonction pour charger les trajets depuis l'API
 function loadTrips() {
-  fetch("../trips.json") // Récupère les données du fichier JSON
+  fetch("http://localhost:3000/trip/search")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erreur de chargement des trajets");
@@ -16,9 +16,10 @@ function loadTrips() {
       return response.json();
     })
     .then((data) => {
-      allTrips = data; // On stocke les trajets mais on ne les affiche pas
-    })
-}
+      if (data.trips) {
+        allTrips = data.trips; // Stocke les trajets pour filtrage
+      }
+    })}
 
 // Fonction pour afficher les trajets
 function displayTrips(trips) {
