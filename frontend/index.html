@@ -5,7 +5,7 @@
     <title>Tickethack - Recherche de Trajets</title>
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="styles/index.css">
-    </head>
+</head>
 <body>
     <header>
         <div class="logo">Tickethack</div>
@@ -14,17 +14,21 @@
             <a href="pages/bookings.html">Réservations</a>
         </nav>
     </header>
+    
     <main>
         <div class="background"></div>
         <div class="title">
             <h1>Explore le monde sans effort en train !</h1>
-            <p> Compare, reserve et profite des prix pas cher pour les billets de train : Ta journée commence sur Tickethack</p>
+            <p id="empty-message" style="display: none;">Aucun trajet disponible</p>
+            <p>Compare, réserve et profite des prix pas cher pour les billets de train : Ta journée commence sur Tickethack</p>
         </div>
-        <section class="results-card">
+        
+        <section id="results-card" class="results-card">
             <img src="./images/train.png" alt="Dessin de train" class="train-illustration">
             <div class="separator green"></div>
             <p>C'est l'heure de réserver votre futur voyage</p>
         </section>
+
         <section class="search-card">
             <input type="text" id="departure" placeholder="Lieu de départ">
             <input type="text" id="arrival" placeholder="Lieu d'arrivée">
@@ -34,5 +38,7 @@
             <button id="searchButton">Rechercher</button>
         </section>
     </main>
+
+    <script src="./script.js"></script>  <!-- Chargement des scripts JavaScript --> 
 </body>
 </html>
