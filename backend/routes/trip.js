@@ -5,7 +5,7 @@ const Trip = require('../models/trips');
 
 
 //GET - Afficher la liste des voyages en fonction de la ville de départ et d'arrivée saisie par l'utilisateur
-router.get('/search', (req, res) => {
+router.post('/search', (req, res) => {
     console.log('departureCity', req.body.departure);
     console.log('arrivalCity', req.body.arrival);
     console.log('dateTrip', req.body.date);
