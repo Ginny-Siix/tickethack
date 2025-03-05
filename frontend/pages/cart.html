@@ -19,30 +19,14 @@
       <section class="cart">
         <h2>Trajets sélectionnés</h2>
         <div id="cartContainer" class="cart-container">
-          <!-- Billets en dur pour le style -->
-          <div class="cart-item">
-            <p>
-              <strong>Départ :</strong> Paris → Lyon
-            </p>
-            <p><strong>Heure :</strong> 20:09</p>
-            <p><strong>Prix :</strong> 103€</p>
-            <button class="remove-button">X</button>
-          </div>
-          <div class="cart-item">
-            <p>
-              <strong>Départ :</strong> Lyon →
-              <strong>Arrivée :</strong> Marseille
-            </p>
-            <p><strong>Heure :</strong> 15:45</p>
-            <p><strong>Prix :</strong> 89€</p>
-            <button class="remove-button">X</button>
-          </div>
+          <!-- Les éléments seront ajoutés dynamiquement ici -->
+        </div>
+        <div id="cartTotalSection" class="cart-total">
+          <p>Total : <span id="totalPrice">0€</span></p>
+          <button id="payButton" class="pay-button">Payer</button>
         </div>
       </section>
-      <section id="cartTotalSection" class="cart-total">
-        <p>Total : <span id="totalPrice">192€</span></p>
-        <button id="payButton" class="pay-button">Payer</button>
-      </section>
     </main>
+    <script src="../scripts/cart.js"></script> <!-- Fichier JS pour gérer l'ajout et suppression des trajets -->
   </body>
 </html>
