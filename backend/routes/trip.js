@@ -22,6 +22,8 @@ router.get('/search', (req, res) => {
         const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // Début de la journée
         const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // Fin de la journée
         console.log("Conversion date ", date);
+        console.log("startOfDay", startOfDay);
+        console.log("endOfDay", endOfDay);
         Trip.find({
             departure: { $regex: new RegExp(req.query.departure, 'i') },
             arrival: { $regex: new RegExp( req.query.arrival, 'i') },
