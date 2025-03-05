@@ -49,6 +49,19 @@ router.post('/add', (req,res) =>{
 })}
 })
 
+//AJOUT DE LA ROUTE GET CART POUR AFFICHER LE CONTENU DE LA COLLECTION CART
+router.get("/", (req, res) => {
+    Cart.find().then(data => {
+      if (data) {
+        res.json({ result: true, cart : data });
+      } else {
+        res.json({ result: false, error: "Cart is empty" });
+      }
+    });
+  });
+  
+  
+
 
 
 module.exports = router;
