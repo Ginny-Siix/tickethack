@@ -4,69 +4,71 @@ const emptyMessage = document.getElementById("empty-message");
 const searchButton = document.getElementById("searchButton");
 const departureInput = document.getElementById("departure");
 const arrivalInput = document.getElementById("arrival");
+const dateDepartureInput = document.getElementById("date");
+
 let allTrips = []; // Stocker tous les trajets ici
 
-// Fonction pour charger les trajets depuis trips.json
-function loadTrips() {
-  fetch("../trips.json") // Récupère les données du fichier JSON
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Erreur de chargement des trajets");
-      }
-      return response.json();
-    })
+// Fonction pour charger les trajets au démarrage
+
+// Événement pour lancer la recherche
+searchButton.addEventListener("click", function () {
+  const departureValue = departureInput.value.trim().toLowerCase();
+  const arrivalValue = arrivalInput.value.trim().toLowerCase();
+  const dateValue = dateDepartureInput.value; // Récupère la date de départ
+  console.log("Bouton cliqué !", departureValue, arrivalValue, dateValue);
+
+  if (departureValue === "" || arrivalValue === "" || dateValue === "") {
+    emptyMessage.textContent =
+      "Veuillez renseigner un départ, une arrivée et une date de départ.";
+    emptyMessage.style.display = "block";
+    tripsContainer.innerHTML = "";
+    return;
+  }
+
+  fetch("http://localhost:3000/trip/search", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      departure: departureValue,
+      arrival: arrivalValue,
+      date: dateValue,
+    }),
+  })
+    .then((response) => response.json())
     .then((data) => {
-      allTrips = data; // On stocke les trajets mais on ne les affiche pas
-    })
-}
+      allTrips = data.trips;
+      if (data.result) {
+        displayTrips(allTrips);
+      } else {
+        tripsContainer.innerHTML = "";
+        // Ajouter l'image et le message
+        tripsContainer.innerHTML = `
+          <div class="no-trips">
+            <img src="./images/notfound.png" alt="Illustration du train" class="no-trips-img">
+            <p>Aucun trajet disponible</p>
+          </div>`;
+        emptyMessage.style.display = "none"; // Masquer le message d'erreur précédent
+      }
+    });
+});
 
 // Fonction pour afficher les trajets
 function displayTrips(trips) {
-  tripsContainer.innerHTML = ""; // Vide la section avant d'ajouter les nouveaux trajets
+  tripsContainer.innerHTML = ""; // Vide l'affichage avant d'ajouter les nouveaux trajets
 
-  if (trips.length === 0) {
-    emptyMessage.style.display = "block"; // Affiche le message si aucun résultat
-  } else {
-    emptyMessage.style.display = "none"; // Cache le message
-  }
-
-  const tripsHTML = trips
-    .map(
-      (trip) => `
-        <div class="trip-item">
-            <p><strong>Départ :</strong> ${trip.departure}</p>
-            <p><strong>Arrivée :</strong> ${trip.arrival}</p>
-            <p><strong>Date :</strong> ${new Date(
-              trip.date.$date
-            ).toLocaleDateString("fr-FR")}</p>
-            <button class="add-to-cart" data-id="${trip.departure}-${
-        trip.arrival
-      }">Ajouter au panier</button>
-        </div>
-    `
-    )
-    .join("");
-
-  tripsContainer.innerHTML = tripsHTML;
+  trips.forEach((trip) => {
+    tripsContainer.innerHTML += `
+      <div class="trip-item">
+          <p><strong>Départ :</strong> ${trip.departure}</p>
+          <p><strong>Arrivée :</strong> ${trip.arrival}</p>
+          <p><strong>Date :</strong> ${new Date(trip.date).toLocaleDateString(
+            "fr-FR"
+          )}</p>
+          <button class="add-to-cart" data-id="${trip.departure}-${
+      trip.arrival
+    }">
+            Ajouter au panier
+          </button>
+      </div>`;
+  });
 }
-
-// Fonction pour rechercher les trajets
-function searchTrips() {
-  const departureValue = departureInput.value.trim().toLowerCase();
-  const arrivalValue = arrivalInput.value.trim().toLowerCase();
-
-  // Filtrer les trajets selon les entrées
-  const filteredTrips = allTrips.filter(
-    (trip) =>
-      trip.departure.toLowerCase().includes(departureValue) &&
-      trip.arrival.toLowerCase().includes(arrivalValue)
-  );
-
-  displayTrips(filteredTrips);
-}
-
-// Événement pour lancer la recherche
-searchButton.addEventListener("click", searchTrips);
-
-// Charger les trajets au démarrage de la page sans les afficher
-loadTrips();
