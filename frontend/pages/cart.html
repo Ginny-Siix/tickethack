@@ -17,16 +17,30 @@
     </header>
     <main>
       <section class="cart">
-          <div id="cartContainer" class="cart-container">
-            <h2>Trajets sélectionnés</h2>
-          <p id="emptyCartMessage" class="empty-message">
-            Aucun billets dans votre panier
-          </p>
-          <p>Pourquoi ne pas planifier de voyage ?</p>
+        <h2>Trajets sélectionnés</h2>
+        <div id="cartContainer" class="cart-container">
+          <!-- Billets en dur pour le style -->
+          <div class="cart-item">
+            <p>
+              <strong>Départ :</strong> Paris → Lyon
+            </p>
+            <p><strong>Heure :</strong> 20:09</p>
+            <p><strong>Prix :</strong> 103€</p>
+            <button class="remove-button">X</button>
+          </div>
+          <div class="cart-item">
+            <p>
+              <strong>Départ :</strong> Lyon →
+              <strong>Arrivée :</strong> Marseille
+            </p>
+            <p><strong>Heure :</strong> 15:45</p>
+            <p><strong>Prix :</strong> 89€</p>
+            <button class="remove-button">X</button>
+          </div>
         </div>
       </section>
-      <section id="cartTotalSection" class="cart-total" style="display: none">
-        <p>Total : <span id="totalPrice">0€</span></p>
+      <section id="cartTotalSection" class="cart-total">
+        <p>Total : <span id="totalPrice">192€</span></p>
         <button id="payButton" class="pay-button">Payer</button>
       </section>
     </main>
