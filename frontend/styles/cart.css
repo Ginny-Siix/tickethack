@@ -1,20 +1,34 @@
+body {
+    background-color: #f0f0f0; /* Gris clair pour le fond */
+}
 .cart-container {
     width: 80%;
+    height: 200px;
     margin: auto;
-    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    align-content: center;
+    margin-top: 15%;
 }
 
-.cart-item {
+.cart-container h2{
+    margin: 0;
+}
+.cart-total {
+    background-color: #003366; /* Bleu foncé */
+    color: white;
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #ccc;
 }
-
-.total {
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-align: right;
-    margin-top: 20px;
+.pay-button {
+    background-color: green;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+.pay-button:hover {
+    background-color: darkgreen;
 }
