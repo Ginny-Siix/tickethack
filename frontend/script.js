@@ -56,19 +56,49 @@ searchButton.addEventListener("click", function () {
 function displayTrips(trips) {
   tripsContainer.innerHTML = ""; // Vide l'affichage avant d'ajouter les nouveaux trajets
 
-  trips.forEach((trip) => {
-    tripsContainer.innerHTML += `
-      <div class="trip-item">
-          <p><strong>Départ :</strong> ${trip.departure}</p>
-          <p><strong>Arrivée :</strong> ${trip.arrival}</p>
-          <p><strong>Date :</strong> ${new Date(trip.date).toLocaleDateString(
-            "fr-FR"
-          )}</p>
-          <button class="add-to-cart" data-id="${trip.departure}-${
-      trip.arrival
-    }">
-            Ajouter au panier
-          </button>
-      </div>`;
-  });
+  if (trips.length === 0) {
+    emptyMessage.style.display = "block"; // Affiche le message si aucun résultat
+  } else {
+    emptyMessage.style.display = "none"; // Cache le message
+  }
+
+  const tripsHTML = trips
+    .map(
+      (trip) => `
+        <div class="trip-item">
+            <p><strong>Départ :</strong> ${trip.departure}</p>
+            <p><strong>Arrivée :</strong> ${trip.arrival}</p>
+            <p><strong>Date :</strong> ${new Date(
+              trip.date.$date
+            ).toLocaleDateString("fr-FR")}</p>
+            <button class="add-to-cart" data-id="${trip.departure}-${
+        trip.arrival
+      }">Ajouter au panier</button>
+        </div>
+    `
+    )
+    .join("");
+
+  tripsContainer.innerHTML = tripsHTML;
 }
+
+// Fonction pour rechercher les trajets
+function searchTrips() {
+  const departureValue = departureInput.value.trim().toLowerCase();
+  const arrivalValue = arrivalInput.value.trim().toLowerCase();
+
+  // Filtrer les trajets selon les entrées
+  const filteredTrips = allTrips.filter(
+    (trip) =>
+      trip.departure.toLowerCase().includes(departureValue) &&
+      trip.arrival.toLowerCase().includes(arrivalValue)
+  );
+
+  displayTrips(filteredTrips);
+}
+
+// Événement pour lancer la recherche
+searchButton.addEventListener("click", searchTrips);
+
+// Charger les trajets au démarrage de la page sans les afficher
+loadTrips();
