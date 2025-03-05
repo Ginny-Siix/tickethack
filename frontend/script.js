@@ -73,27 +73,4 @@ function displayTrips(trips) {
       </div>`;
   });
 }
-
-// Ajouter un événement à chaque bouton "Ajouter au panier" pour ajouter le ticket au panier
-
-document.addEventListener("click", function (event) {
-  if (event.target.classList.contains("add-to-cart")) {
-    const tripId = event.target.dataset.id;
-    const trip = allTrips.find((trip) => trip.departure + "-" + trip.arrival === tripId);
-
-    // Créer un nouveau ticket
-    const ticket = {
-      departure: trip.departure,
-      arrival: trip.arrival,
-      date: trip.date,
-      price: trip.price, // Ajouter le prix du ticket à votre choix
-    };
-    console.log("Ticket ajouté :", ticket);
-
-    // Ajouter le ticket au panier
-    // TODO: Ajouter le ticket au panier en utilisant une API ou une base de données
-
-    // Afficher un message de confirmation
-    alert("Trajet ajouté au panier");
-  }
-});
+//ok
