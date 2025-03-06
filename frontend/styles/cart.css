@@ -7,12 +7,12 @@ body {
     background-color: white;
     width: 80%;
     margin: 5% auto 0;
-    padding: 20px;
+    padding: 0 0;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     text-align: center;
     display: flex;
-    flex-direction: column; /* Organiser les éléments en colonne */
+    flex-direction: column; /* La cart est en colonne */
   }
   
   .cart-container {
@@ -34,7 +34,7 @@ body {
   }
   
   .remove-button {
-    background-color: red;
+    background-color: rgb(22, 85, 6);
     color: white;
     border: none;
     padding: 5px 10px;
@@ -45,22 +45,23 @@ body {
     text-align: center;
   }
   
+  /* Mise à jour de cart-total pour qu'il soit en ligne */
   .cart-total {
     background-color: #004080;
     color: white;
     border-radius: 0 0 10px 10px;
-    width: 100%; /* Étendre la largeur du total pour correspondre à .cart */
+    width: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-between; /* Séparer le texte et le bouton */
+    align-items: center; /* Centrage vertical */
+    padding: 15px 20px;
+    box-sizing: border-box;
   }
-
+  
   .cart-total p {
-    margin: 1% 9%;
+    margin: 0 0% 0 5%;
+    font-size: 18px;
   }
-
-
   
   .pay-button {
     background-color: green;
@@ -70,7 +71,7 @@ body {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
-    margin: 1% 9%;
+    margin: 0 5% 0 0;
     width: 10%;
   }
   
