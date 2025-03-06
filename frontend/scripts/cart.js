@@ -4,18 +4,19 @@ const totalPriceElement = document.getElementById("totalPrice");
 let cartItems = []; // Tableau pour stocker les éléments du panier
 
 // Exemple de fonction pour ajouter un trajet au panier
-function addToCart(departure, arrival, time, price) {
+function addToCart(departure, arrival, time, date, price) {
   const cartItem = {
     departure,
     arrival,
     time,
+    date,
     price,
   };
 
   cartItems.push(cartItem);
   displayCart();
 }
-
+console.log(cartItems)
 // Fonction pour afficher les trajets dans le panier
 function displayCart() {
   // Vider le panier avant de réafficher les éléments
@@ -29,6 +30,7 @@ function displayCart() {
     
     cartItemDiv.innerHTML = `
       <p>${item.departure} > ${item.arrival}</p>
+      <p>${item.date}</p>
       <p>${item.time}</p>
       <p>${item.price}€</p>
       <button class="remove-button" onclick="removeFromCart(${index})">X</button>
@@ -50,5 +52,10 @@ function removeFromCart(index) {
 }
 
 // Ajouter des trajets au panier (exemples)
-addToCart("Paris", "Lyon", "20:09", 103);
-addToCart("Lyon", "Marseille", "15:45", 89);
+addToCart("Paris", "Lyon", "20:09", "03/03/25", 100);
+addToCart("Orleans", "Valence", "18:55","03/03/25", 100);
+addToCart("Orleans", "Valence", "18:55", "03/03/25",100);
+addToCart("Orleans", "Nantes",  "18:55", "03/03/25",100);
+addToCart("Orleans", "Poudlard", "18:55", "03/03/25",100);
+addToCart("Valence", "Orleans", "13:55", "03/03/25",100);
+

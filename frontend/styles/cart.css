@@ -43,7 +43,7 @@ body {
   }
   
   .cart-item p:nth-child(1) {
-    max-width: 15%; /* Limite la largeur de la destination pour éviter qu'elle prenne trop d'espace */
+    max-width: 20%; /* Limite la largeur de la destination pour éviter qu'elle prenne trop d'espace */
   }
   
   .cart-item p:nth-child(2) {
@@ -54,6 +54,11 @@ body {
   .cart-item p:nth-child(3) {
     max-width: 10%; /* Limite la largeur du prix */
     text-align: right; /* Aligner à droite pour le prix */
+  }
+
+  .cart-item p:nth-child(4) {
+    max-width: 10%; /* Limite la largeur du nombre de tickets */
+    text-align: center; /* Aligner à droite pour le nombre de tickets */
   }
   
   .remove-button {
@@ -71,7 +76,7 @@ body {
     
   /* Mise à jour de cart-total pour qu'il soit en ligne */
   .cart-total {
-    background-color: #004080;
+    background-color: #082e52;
     color: white;
     border-radius: 0 0 10px 10px;
     width: 100%;
