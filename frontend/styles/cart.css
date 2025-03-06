@@ -43,6 +43,7 @@ body {
     border-radius: 3px;
     width: 10%;
     text-align: center;
+    margin: 0;
   }
   
   /* Mise à jour de cart-total pour qu'il soit en ligne */
@@ -51,7 +52,7 @@ body {
     color: white;
     border-radius: 0 0 10px 10px;
     width: 100%;
-    display: flex;
+    display: flex !important;
     justify-content: space-between; /* Séparer le texte et le bouton */
     align-items: center; /* Centrage vertical */
     padding: 15px 20px;
