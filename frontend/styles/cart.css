@@ -24,13 +24,36 @@ body {
   }
   
   .cart-item {
-    background-color: #e0e0e0;
+    background-color: #f5f4ed;
     padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 5px;
     width: 80%;
+    text-align: left; /* Alignement du texte à gauche pour éviter que l'espace ne soit utilisé de manière imprévisible */
+  }
+  
+  .cart-item p {
+    margin: 0; /* Suppression de la marge par défaut */
+    flex-grow: 1; /* Chaque <p> peut occuper un espace égal */
+    white-space: nowrap; /* Evite que le texte ne se brise sur plusieurs lignes */
+    overflow: hidden; /* Cache le texte qui déborde (si nécessaire) */
+    text-overflow: ellipsis; /* Affiche "..." si le texte est trop long */
+  }
+  
+  .cart-item p:nth-child(1) {
+    max-width: 15%; /* Limite la largeur de la destination pour éviter qu'elle prenne trop d'espace */
+  }
+  
+  .cart-item p:nth-child(2) {
+    max-width: 10%; /* Limite la largeur de l'heure */
+    text-align: center; /* Centrer l'heure */
+  }
+  
+  .cart-item p:nth-child(3) {
+    max-width: 10%; /* Limite la largeur du prix */
+    text-align: right; /* Aligner à droite pour le prix */
   }
   
   .remove-button {
@@ -41,11 +64,11 @@ body {
     cursor: pointer;
     font-size: 16px;
     border-radius: 3px;
-    width: 10%;
+    width: auto; /* Adapter la largeur du bouton au contenu */
     text-align: center;
     margin: 0;
   }
-  
+    
   /* Mise à jour de cart-total pour qu'il soit en ligne */
   .cart-total {
     background-color: #004080;
@@ -60,7 +83,7 @@ body {
   }
   
   .cart-total p {
-    margin: 0 0% 0 5%;
+    margin: 0 0% 0 9%;
     font-size: 18px;
   }
   
@@ -72,7 +95,7 @@ body {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
-    margin: 0 5% 0 0;
+    margin: 0 9% 0 0;
     width: 10%;
   }
   
