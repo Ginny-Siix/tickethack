@@ -1,73 +1,75 @@
-document.querySelector('#bookButton').addEventListener('click', function () {
-    window.location.href = 'pages/bookings.html';
+// Sélection des éléments HTML
+const tripsContainer = document.getElementById("results-card");
+const emptyMessage = document.getElementById("empty-message");
+const searchButton = document.getElementById("searchButton");
+const departureInput = document.getElementById("departure");
+const arrivalInput = document.getElementById("arrival");
+const dateDepartureInput = document.getElementById("date");
+
+let allTrips = []; // Stocker tous les trajets ici
+
+// Fonction pour charger les trajets au démarrage
+
+// Événement pour lancer la recherche
+searchButton.addEventListener("click", function () {
+  const departureValue = departureInput.value.trim().toLowerCase();
+  const arrivalValue = arrivalInput.value.trim().toLowerCase();
+  const dateValue = dateDepartureInput.value; // Récupère la date de départ
+  console.log("Bouton cliqué !", departureValue, arrivalValue, dateValue);
+
+  if (departureValue === "" || arrivalValue === "" || dateValue === "") {
+    emptyMessage.textContent =
+      "Veuillez renseigner un départ, une arrivée et une date de départ.";
+    emptyMessage.style.display = "block";
+    tripsContainer.innerHTML = "";
+    return;
+  }
+
+  fetch("http://localhost:3000/trip/search", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      departure: departureValue,
+      arrival: arrivalValue,
+      date: dateValue,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      allTrips = data.trips;
+      if (data.result) {
+        displayTrips(allTrips);
+      } else {
+        tripsContainer.innerHTML = "";
+        // Ajouter l'image et le message
+        tripsContainer.innerHTML = `
+          <div class="no-trips">
+            <img src="./images/notfound.png" alt="Illustration du train" class="no-trips-img">
+            <p>Aucun trajet disponible</p>
+          </div>`;
+        emptyMessage.style.display = "none"; // Masquer le message d'erreur précédent
+      }
+    });
 });
 
+// Fonction pour afficher les trajets
+function displayTrips(trips) {
+  tripsContainer.innerHTML = ""; // Vide l'affichage avant d'ajouter les nouveaux trajets
 
-
-
-fetch('http://localhost:3000/bookings')
-	.then(response => response.json())
-	.then(data => {
-		if (data.weather) {
-			for (let i = 0; i < data.weather.length; i++) {
-				document.querySelector('#cityList').innerHTML += `
-				<div class="cityContainer">
-				<p class="name">${data.weather[i].cityName}</p>
-				<p class="description">${data.weather[i].description}</p>
-				<img class="weatherIcon" src="images/${data.weather[i].main}.png"/>
-				<div class="temperature">
-					<p class="tempMin">${data.weather[i].tempMin}°C</p>
-					<span>-</span>
-					<p class="tempMax">${data.weather[i].tempMax}°C</p>
-				</div>
-				<button class="deleteCity" id="${data.weather[i].cityName}">Delete</button>
-			</div>
-			`;
-			}
-			updateDeleteCityEventListener();
-		}
-	});
-
-function updateDeleteCityEventListener() {
-	for (let i = 0; i < document.querySelectorAll('.deleteCity').length; i++) {
-		document.querySelectorAll('.deleteCity')[i].addEventListener('click', function () {
-			fetch(`http://localhost:3000/weather/${this.id}`, { method: 'DELETE' })
-				.then(response => response.json())
-				.then(data => {
-					if (data.result) {
-						this.parentNode.remove();
-					}
-				});
-		});
-	}
+  trips.forEach((trip) => {
+    tripsContainer.innerHTML += `
+      <div class="trip-item">
+          <p><strong>Départ :</strong> ${trip.departure}</p>
+          <p><strong>Arrivée :</strong> ${trip.arrival}</p>
+          <p><strong>Date :</strong> ${new Date(trip.date).toLocaleDateString(
+            "fr-FR"
+          )}</p>
+          <button class="add-to-cart" data-id="${trip.departure}-${
+      trip.arrival
+    }">
+            Ajouter au panier
+          </button>
+      </div>`;
+  });
 }
 
-document.querySelector('#addCity').addEventListener('click', function () {
-	const cityName = document.querySelector('#cityNameInput').value;
-
-	fetch('http://localhost:3000/weather', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ cityName }),
-	}).then(response => response.json())
-		.then(data => {
-			if (data.result) {
-				document.querySelector('#cityList').innerHTML += `
-			<div class="cityContainer">
-				<p class="name">${data.weather.cityName}</p>
-				<p class="description">${data.weather.description}</p>
-				<img class="weatherIcon" src="images/${data.weather.main}.png"/>
-				<div class="temperature">
-					<p class="tempMin">${data.weather.tempMin}°C</p>
-					<span>-</span>
-					<p class="tempMax">${data.weather.tempMax}°C</p>
-				</div>
-				<button class="deleteCity" id="${data.weather.cityName}">Delete</button>
-			</div>
-					`;
-				updateDeleteCityEventListener();
-				document.querySelector('#cityNameInput').value = '';
-			}
-
-		});
-});
