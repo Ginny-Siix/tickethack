@@ -12,6 +12,7 @@
     "express": "~4.16.1",
     "moment": "^2.29.3",
     "moment-random": "^1.1.0",
+    "moment-timezone": "^0.5.47",
     "mongoose": "^8.12.0",
     "morgan": "~1.9.1",
     "node-fetch": "2"
