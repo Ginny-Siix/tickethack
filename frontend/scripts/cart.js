@@ -34,9 +34,9 @@ function displayCart() {
           //const cartItemDiv = document.createElement("div");
           //cartItemDiv.classList.add("cart-item");
           const tripDate = new Date(cart.date);
-      
+
           // Récupérer l'heure et les minutes en UTC 
-          let hours = tripDate.getUTCHours(); 
+          let hours = tripDate.getUTCHours();
           let minutes = tripDate.getUTCMinutes();
 
           const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
@@ -51,40 +51,42 @@ function displayCart() {
           //Formatter pour les villes de départ et d'arrrivée ont la première lettre en majuscule et le reste en miniscule
           const formattedDeparture = cart.departure.charAt(0).toUpperCase() + cart.departure.slice(1).toLowerCase();
           const formattedArrival = cart.arrival.charAt(0).toUpperCase() + cart.arrival.slice(1).toLowerCase();
-  
+
 
           cartContainer.innerHTML += `
           <div class ="cart-item">
-            <p>${formattedDeparture} > ${formattedArrival}</p>
+            <p >${formattedDeparture} > ${formattedArrival}</p>
             <p>${formattedDate} ${formattedTime}</p>
             <p>${cart.price}€</p>
-            <button class="remove-button" onclick="removeFromCart">X</button>
+            <button class="remove-button" onclick="removeFromCart('${cart._id}')">X</button>
             </div>
           `;
 
-          //cartContainer.appendChild(cartItemDiv);
-
           total += cart.price; // Ajouter au total
 
-          totalPriceElement.textContent = total + "€";
-          document.getElementById("cartTotalSection").style.display = data.cart.length ? "block" : "none"; // Afficher ou cacher la section total
         });
+      
       }
+      totalPriceElement.textContent = total + "€";
+      document.getElementById("cartTotalSection").style.display = data.cart && data.cart.length ? "block" : "none"; // Afficher ou cacher la section total  
     });
 }
 
 // Fonction pour supprimer un trajet du panier
-function removeFromCart(index) {
-  //cartItems.splice(ex, 1); // Supprimer l'élément à l'index donné
-  for (let i = 0; i < document.querySelectorAll('.remove-button').length; i++) {
-    document.querySelectorAll('.delete')[i].addEventListener('click', function () {
-      this.parentNode.remove();
-      const messagesCount = document.querySelectorAll('p').length;
-      document.querySelector('#count').textContent = messagesCount;
+function removeFromCart(idTripDelete) {
+  console.log('HELLO', idTripDelete);
+  fetch(`http://localhost:3000/cart/delete/${idTripDelete}`, {
+    method: 'DELETE',
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.result) {
+        displayCart();
+      }
+      else {
+        console.log("Erreur lors de la supression de l'élément")
+      }
     })
-  };
-
-  displayCart(); // Réafficher le panier après suppression
 }
 
 //Appel de la fonction pour afficher la liste des voyages contenus dans le panier
