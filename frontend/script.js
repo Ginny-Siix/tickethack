@@ -71,6 +71,19 @@ function displayTrips(trips) {
             Ajouter au panier
           </button>
       </div>`;
+
+      for (let i = 0; i < addToCartButton.length; i++) {
+        addToCartButton[i].addEventListener('click', function () {
+           fetch(`http://localhost:3000/cart/add?departure=${trip.departure}&arrival=${trip.arrival}&date=${trip.date}&price=${trip.price}`, {
+             method: 'POST',
+             headers : {'Content-Type': 'application/json'},
+             body: JSON.stringify({departure: trip.departure, arrival: trip.arrival, date: trip.date, price: trip.price})
+           })
+           .then(reponse => reponse.json())
+           .then(data => {console.log("Trip well added in collection : ", data)})
+           
+         })
+       };
   });
 }
 //ok
