@@ -64,9 +64,25 @@ router.get("/", (req, res) => {
 });
 
 //route delete : pour supprimer un voyage dans la collection cart
+router.delete("/delete/:id", (req,res)=>{
+  const tripToBeDeleted = req.param.id;
 
 
+  Cart.deleteOne({_id: tripToBeDeleted})
+  .then(data => {
 
+    if(data.length > 0){
+      console.log( "Trip deleted : ", tripToBeDeleted );
+      res.json({result:true});
+      
+    }
+    else{
+      console.log( "Trip that is not deleted : ", data);
+      res.json({result: false, error:"Trip is not deleted in the cart because not found or already deleted"})
+    }
+
+  })
+})
 
 
 
