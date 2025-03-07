@@ -2,6 +2,16 @@ body {
     background-color: #f5f5f5;
     font-family: Arial, sans-serif;
   }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  a {
+    color: forestgreen;
+    text-decoration: none;
+  }
   
   .cart {
     background-color: white;
