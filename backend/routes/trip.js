@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 require('../models/connection');
 const Trip = require('../models/trips');
+//const moment = require('moment-timezone');
+const moment = require('moment');
 
 
 //GET - Afficher la liste des voyages en fonction de la ville de départ et d'arrivée saisie par l'utilisateur
@@ -17,10 +19,14 @@ router.get('/search', (req, res) => {
     }
     else {
         //convertir la date en entrée du router (qui est en format string) en date
-        const date = new Date(req.query.date);
+        const date = req.query.date;
+        console.log(req.query.date);
          // Définir la date de début et la date de fin de la journée du voyage 
-        const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // Début de la journée
-        const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // Fin de la journée
+        //const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // Début de la journée
+        const startOfDay = moment(date).startOf('day');
+        //const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // Fin de la journée
+        const endOfDay = moment(date).endOf('day');
+        
         console.log("Conversion date ", date);
         console.log("startOfDay", startOfDay);
         console.log("endOfDay", endOfDay);
@@ -30,7 +36,7 @@ router.get('/search', (req, res) => {
             // Recherche entre le début et la fin de la journée
             date: {  $gte: startOfDay, $lte: endOfDay }
         })
-            //gte : greater than equal : chercher à partir de cette date là
+            .sort({date: 'asc'})
             .then(data => {
                 console.log('list departures and arrivals', data);
                 if (data.length >0) {
