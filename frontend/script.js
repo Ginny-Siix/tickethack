@@ -5,6 +5,7 @@ const searchButton = document.getElementById("searchButton");
 const departureInput = document.getElementById("departure");
 const arrivalInput = document.getElementById("arrival");
 const dateDepartureInput = document.getElementById("date");
+const addToCartButton = document.getElementsByClassName("add-to-cart");
 
 let allTrips = []; // Stocker tous les trajets ici
 
@@ -25,7 +26,9 @@ searchButton.addEventListener("click", function () {
     return;
   }
 
-  fetch(`http://localhost:3000/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`)
+  fetch(
+    `http://localhost:3000/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`
+  )
     .then((response) => response.json())
     .then((data) => {
       allTrips = data.trips;
@@ -49,41 +52,49 @@ function displayTrips(trips) {
   tripsContainer.innerHTML = ""; // Vide l'affichage avant d'ajouter les nouveaux trajets
 
   trips.forEach((trip) => {
-
     const tripDate = new Date(trip.date);
-      
-    // Récupérer l'heure et les minutes en UTC 
-    let hours = tripDate.getUTCHours(); 
+
+    // Récupérer l'heure et les minutes en UTC
+    let hours = tripDate.getUTCHours();
     let minutes = tripDate.getUTCMinutes();
 
     // Format HH:MM (ajoute un zéro devant si nécessaire)
-    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}`;
 
     tripsContainer.innerHTML += `
       <div class="trip-item">
-          <p><strong>Départ :</strong> ${trip.departure}</p>
-          <p><strong>Arrivée :</strong> ${trip.arrival}</p>
-          <p><strong>Date :</strong> ${formattedTime}</p>
-          <p><strong>Prix :</strong> ${trip.price} €</p>
-          <button class="add-to-cart" data-id="${trip.departure}-${
-      trip.arrival
-    }">
-            Ajouter au panier
+          <p><strong></strong> ${trip.departure}</p>
+          <p><strong></strong> ${trip.arrival}</p>
+          <p><strong></strong> ${formattedTime}</p>
+          <p><strong></strong> ${trip.price} €</p>
+          <button class="add-to-cart" data-id="${trip.departure}-${trip.arrival}">
+            Add
           </button>
       </div>`;
 
-      for (let i = 0; i < addToCartButton.length; i++) {
-        addToCartButton[i].addEventListener('click', function () {
-           fetch(`http://localhost:3000/cart/add?departure=${trip.departure}&arrival=${trip.arrival}&date=${trip.date}&price=${trip.price}`, {
-             method: 'POST',
-             headers : {'Content-Type': 'application/json'},
-             body: JSON.stringify({departure: trip.departure, arrival: trip.arrival, date: trip.date, price: trip.price})
-           })
-           .then(reponse => reponse.json())
-           .then(data => {console.log("Trip well added in collection : ", data)})
-           
-         })
-       };
+    for (let i = 0; i < addToCartButton.length; i++) {
+      addToCartButton[i].addEventListener("click", function () {
+        fetch(
+          `http://localhost:3000/cart/add?departure=${trip.departure}&arrival=${trip.arrival}&date=${trip.date}&price=${trip.price}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              departure: trip.departure,
+              arrival: trip.arrival,
+              date: trip.date,
+              price: trip.price,
+            }),
+          }
+        )
+          .then((reponse) => reponse.json())
+          .then((data) => {
+            console.log("Trip well added in collection : ", data);
+          });
+      });
+    }
   });
 }
 //ok

@@ -47,18 +47,13 @@ body {
   }
   
   .cart-item p:nth-child(2) {
-    max-width: 10%; /* Limite la largeur de l'heure */
+    max-width: 20%; /* Limite la largeur de l'heure */
     text-align: center; /* Centrer l'heure */
   }
   
   .cart-item p:nth-child(3) {
-    max-width: 10%; /* Limite la largeur du prix */
+    max-width: 15%; /* Limite la largeur du prix */
     text-align: right; /* Aligner à droite pour le prix */
-  }
-
-  .cart-item p:nth-child(4) {
-    max-width: 10%; /* Limite la largeur du nombre de tickets */
-    text-align: center; /* Aligner à droite pour le nombre de tickets */
   }
   
   .remove-button {
