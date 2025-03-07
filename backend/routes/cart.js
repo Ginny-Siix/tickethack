@@ -1,50 +1,57 @@
 var express = require('express');
 var router = express.Router();
 require('../models/connection');
+const mongoose = require('mongoose');
 const Cart = require('../models/carts');
+const Trip = require('../models/trips');
 const moment = require('moment');
 
 // ROUTE POST QUI PERMET D'AJOUTER UN VOYAGE DANS LE PANIER
-router.post('/add', (req, res) => {
+router.post('/add/:id', (req, res) => {
 
-  console.log('departureCity', req.query.departure);
-  console.log('arrivalCity', req.query.arrival);
-  console.log('dateTrip', req.query.date);
-  console.log('priceTrip', req.query.price)
+  const tripID = req.params.id;
+
+  const objectId = new mongoose.Types.ObjectId(tripID);
+  console.log("Converted ObjectId: ", objectId);
 
   // Vérifier que tous les élements sont renseignés et non vides
-  if (!req.query.departure || !req.query.arrival || !req.query.date || !req.query.price) {
+  if (!req.params.id) {
     res.json({ result: false, error: 'Missing or empty fields' });
   }
   else {
-    //convertir la date en entrée du router (qui est en format string) en date
-    const dateTrip =  moment(req.query.date);
-    console.log("Conversion date ", dateTrip);
 
-    Cart.findOne({
-      departure: { $regex: new RegExp(req.query.departure, 'i') },
-      arrival: { $regex: new RegExp(req.query.arrival, 'i') },
-      date: dateTrip,
-      price: req.query.price
+    Trip.findOne({
+      _id: objectId,
     })
-      .then(data => {
-        console.log('data', data);
-        if (data === null) {
-
-          const newTrip = new Cart({
-            departure: req.query.departure,
-            arrival: req.query.arrival,
-            date: req.query.date,
-            price: req.query.price
+      .then(dataTrip => {
+        console.log('data', dataTrip);
+        if (dataTrip !== null) {
+          Cart.findOne({
+            departure: { $regex: new RegExp(dataTrip.departure, 'i') },
+            arrival: { $regex: new RegExp(dataTrip.arrival, 'i') },
+            date: dataTrip.date,
+            price: dataTrip.price
           })
+            .then(dataCart => {
+              if (dataCart === null) {
+                const newTrip = new Cart({
+                  departure: dataTrip.departure,
+                  arrival: dataTrip.arrival,
+                  date: dataTrip.date,
+                  price: dataTrip.price
+                })
 
-          newTrip.save().then(newTrip => {
-            res.json({ result: true });
-
-          })
+                newTrip.save().then(newTrip => {
+                  console.log('Trip well added : ', dataTrip);
+                  res.json({ result: true });
+                })
+              }
+            })
         }
 
         else {
+          console.log("Trip is not added backend");
+          console.log("data ", dataTrip);
           res.json({ result: false, error: 'Trip already in the cart' });
         }
 
@@ -64,24 +71,27 @@ router.get("/", (req, res) => {
 });
 
 //route delete : pour supprimer un voyage dans la collection cart
-router.delete("/delete/:id", (req,res)=>{
-  const tripToBeDeleted = req.param.id;
+router.delete("/delete/:id", (req, res) => {
+  const tripToBeDeleted = req.params.id;
+
+  const objectId = new mongoose.Types.ObjectId(tripToBeDeleted);
+  console.log("Converted ObjectId: ", objectId);
 
 
-  Cart.deleteOne({_id: tripToBeDeleted})
-  .then(data => {
+  Cart.deleteOne({ _id: objectId })
+    .then(data => {
 
-    if(data.length > 0){
-      console.log( "Trip deleted : ", tripToBeDeleted );
-      res.json({result:true});
-      
-    }
-    else{
-      console.log( "Trip that is not deleted : ", data);
-      res.json({result: false, error:"Trip is not deleted in the cart because not found or already deleted"})
-    }
+      if (data.deletedCount > 0) {
+        console.log("Trip deleted : ", tripToBeDeleted);
+        res.json({ result: true });
 
-  })
+      }
+      else {
+        console.log("Trip that is not deleted : ", data);
+        res.json({ result: false, error: "Trip is not deleted in the cart because not found or already deleted" })
+      }
+
+    })
 })
 
 
