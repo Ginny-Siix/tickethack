@@ -18,11 +18,11 @@ router.get("/", (req, res) => { //:id
   //console.log(mongoose.Types.ObjectId.isValid('67c71793f2cecf2d3cdda3d8'));
   //console.log(req.params);
   //const {id}  = req.params;
-  Cart.find({ //findById
-    departure: { $regex: new RegExp(tempObject.departure, 'i') },
+  Cart.find() //findById
+/*     departure: { $regex: new RegExp(tempObject.departure, 'i') },
     arrival: { $regex: new RegExp(tempObject.arrival, 'i') },
     // Recherche entre le début et la fin de la journée
-    date: { $gte: moment(date).startOf('day'), $lte: moment(date).endOf('day') }})
+    date: { $gte: moment(date).startOf('day'), $lte: moment(date).endOf('day') }}) */
     .then(data => {
       console.log(data);
       if (data.length > 0) { //data.length > 0
