@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 require('../models/connection');
-const Trip = require('../models/trips');
+const Cart = require('../models/carts');
 const moment = require('moment');
 //var mongoose = require('mongoose');
 
@@ -18,7 +18,7 @@ router.get("/", (req, res) => { //:id
   //console.log(mongoose.Types.ObjectId.isValid('67c71793f2cecf2d3cdda3d8'));
   //console.log(req.params);
   //const {id}  = req.params;
-  Trip.find({ //findById
+  Cart.find({ //findById
     departure: { $regex: new RegExp(tempObject.departure, 'i') },
     arrival: { $regex: new RegExp(tempObject.arrival, 'i') },
     // Recherche entre le début et la fin de la journée
