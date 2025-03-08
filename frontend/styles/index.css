@@ -144,6 +144,12 @@ button, .add-to-cart {
   margin-top: 1%;
 }
 
+.error-message {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+}
+
 .search-card {
   left: 20%;
   top: 60%;

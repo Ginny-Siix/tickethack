@@ -1,101 +1,96 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-require('../models/connection');
-const mongoose = require('mongoose');
-const Cart = require('../models/carts');
-const Trip = require('../models/trips');
-const moment = require('moment');
+require("../models/connection");
+const mongoose = require("mongoose");
+const Cart = require("../models/carts");
+const Trip = require("../models/trips");
 
-// ROUTE POST QUI PERMET D'AJOUTER UN VOYAGE DANS LE PANIER
-router.post('/add/:id', (req, res) => {
+// ROUTE POST POUR AJOUTER UN VOYAGE DANS LE PANIER
+router.post("/add/:id", async (req, res) => {
+  try {
+    const tripID = req.params.id;
+    const objectId = new mongoose.Types.ObjectId(tripID);
+    console.log("Converted ObjectId: ", objectId);
 
-  const tripID = req.params.id;
+    if (!tripID) {
+      return res.json({ result: false, error: "Missing or empty fields" });
+    }
 
-  const objectId = new mongoose.Types.ObjectId(tripID);
-  console.log("Converted ObjectId: ", objectId);
+    // Vérifier si le trajet existe dans la collection Trip
+    const dataTrip = await Trip.findOne({ _id: objectId });
 
-  // Vérifier que tous les élements sont renseignés et non vides
-  if (!req.params.id) {
-    res.json({ result: false, error: 'Missing or empty fields' });
+    if (!dataTrip) {
+      return res.json({ result: false, error: "Trip not found" });
+    }
+
+    // Vérifier si le trajet est déjà dans le panier
+    const existingTrip = await Cart.findOne({
+      departure: { $regex: new RegExp(dataTrip.departure, "i") },
+      arrival: { $regex: new RegExp(dataTrip.arrival, "i") },
+      date: dataTrip.date,
+      price: dataTrip.price,
+    });
+
+    if (existingTrip) {
+      return res.json({ result: false, error: "Ce billet existe déjà" });
+    }
+
+    // Ajouter le trajet dans le panier
+    const newTrip = new Cart({
+      departure: dataTrip.departure,
+      arrival: dataTrip.arrival,
+      date: dataTrip.date,
+      price: dataTrip.price,
+    });
+
+    await newTrip.save();
+    console.log("Trip well added:", newTrip);
+    res.json({
+      result: true,
+      message: "Votre billet a été ajouté dans le panier",
+    });
+  } catch (error) {
+    console.error("Erreur lors de l'ajout au panier:", error);
+    res.status(500).json({ result: false, error: "Internal server error" });
   }
-  else {
+});
 
-    Trip.findOne({
-      _id: objectId,
-    })
-      .then(dataTrip => {
-        console.log('data', dataTrip);
-        if (dataTrip !== null) {
-          Cart.findOne({
-            departure: { $regex: new RegExp(dataTrip.departure, 'i') },
-            arrival: { $regex: new RegExp(dataTrip.arrival, 'i') },
-            date: dataTrip.date,
-            price: dataTrip.price
-          })
-            .then(dataCart => {
-              if (dataCart === null) {
-                const newTrip = new Cart({
-                  departure: dataTrip.departure,
-                  arrival: dataTrip.arrival,
-                  date: dataTrip.date,
-                  price: dataTrip.price
-                })
+// ROUTE GET POUR AFFICHER LE CONTENU DU PANIER
+router.get("/", async (req, res) => {
+  try {
+    const data = await Cart.find().sort({ date: "asc" });
 
-                newTrip.save().then(newTrip => {
-                  console.log('Trip well added : ', dataTrip);
-                  res.json({ result: true, cart: dataCart });
-                })
-              }
-            })
-        }
-
-        else {
-          console.log("Trip is not added backend");
-          console.log("data ", dataTrip);
-          res.json({ result: false, error: 'Trip already in the cart' });
-        }
-
-      })
-  }
-})
-
-//AJOUT DE LA ROUTE GET CART POUR AFFICHER LE CONTENU DE LA COLLECTION CART
-router.get("/", (req, res) => {
-  Cart.find().sort({ date: 'asc' }).then(data => {
-    if (data && data.length > 0) {
+    if (data.length > 0) {
       res.json({ result: true, cart: data });
     } else {
       res.json({ result: false, error: "Cart is empty" });
     }
-  });
+  } catch (error) {
+    console.error("Erreur lors de la récupération du panier:", error);
+    res.status(500).json({ result: false, error: "Internal server error" });
+  }
 });
 
-//route delete : pour supprimer un voyage dans la collection cart
-router.delete("/delete/:id", (req, res) => {
-  const tripToBeDeleted = req.params.id;
+// ROUTE DELETE POUR SUPPRIMER UN TRAJET DU PANIER
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    const tripToBeDeleted = req.params.id;
+    const objectId = new mongoose.Types.ObjectId(tripToBeDeleted);
+    console.log("Converted ObjectId: ", objectId);
 
-  const objectId = new mongoose.Types.ObjectId(tripToBeDeleted);
-  console.log("Converted ObjectId: ", objectId);
+    const data = await Cart.deleteOne({ _id: objectId });
 
-
-  Cart.deleteOne({ _id: objectId })
-    .then(data => {
-
-      if (data.deletedCount > 0) {
-        console.log("Trip deleted : ", tripToBeDeleted);
-        res.json({ result: true });
-
-      }
-      else {
-        console.log("Trip that is not deleted : ", data);
-        res.json({ result: false, error: "Trip is not deleted in the cart because not found or already deleted" })
-      }
-
-    })
-})
-
-
-
-
+    if (data.deletedCount > 0) {
+      console.log("Trip deleted:", tripToBeDeleted);
+      res.json({ result: true, message: "Trip deleted from cart" });
+    } else {
+      console.log("Trip not deleted:", data);
+      res.json({ result: false, error: "Trip not found in cart" });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la suppression du trajet:", error);
+    res.status(500).json({ result: false, error: "Internal server error" });
+  }
+});
 
 module.exports = router;

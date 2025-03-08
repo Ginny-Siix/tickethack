@@ -6,6 +6,7 @@ const departureInput = document.getElementById("departure");
 const arrivalInput = document.getElementById("arrival");
 const dateDepartureInput = document.getElementById("date");
 const addToCartButton = document.querySelectorAll('.add-to-cart');
+const cartMessage = document.getElementById("cart-message");
 
 let allTrips = []; // Stocker tous les trajets ici
 
@@ -64,41 +65,48 @@ function displayTrips(trips) {
 
     tripsContainer.innerHTML += `
       <div class="trip-item">
-          <p><strong>Départ :</strong> ${trip.departure}</p>
-          <p><strong>Arrivée :</strong> ${trip.arrival}</p>
-          <p><strong>Date :</strong> ${formattedTime}</p>
-          <p><strong>Prix :</strong> ${trip.price} €</p>
+          <p><strong></strong> ${trip.departure}</p>
+          <p><strong></strong> ${trip.arrival}</p>
+          <p><strong></strong> ${formattedTime}</p>
+          <p><strong></strong> ${trip.price} €</p>
           <button class="add-to-cart" onclick="addToCart('${tripId}')">Ajouter au panier</button>
       </div>`;
-
-
-
-
   });
 }
 
 function addToCart(tripId) {
   console.log("Appel fonction addToCart");
-  console.log("trip id : ",tripId);
-
+  console.log("trip id : ", tripId);
 
   fetch(`http://localhost:3000/cart/add/${tripId}`, {
     method: 'POST',
   })
-    .then(reponse => reponse.json())
+    .then(response => response.json())
     .then(data => {
+      console.log("Réponse API :", data); // Debugging
+      const cartMessage = document.getElementById("cart-message");
+
       if (data.result) {
-        console.log('Trip well added in the cart');
-      }
-      else {
-        console.log("Trip not added ", data);
-        console.log("données data : ", data);
+        cartMessage.textContent = "✅ Votre billet a été ajouté au panier !";
+        cartMessage.style.color = "green";
+      } else if (data.error && data.error.toLowerCase().includes("ce billet existe déjà")) { 
+        // Vérifie si l'erreur retournée par l'API indique que le billet est déjà dans le panier
+        cartMessage.textContent = "⚠️ Ce billet existe déjà dans votre panier.";
+        cartMessage.style.color = "orange";
+      } else {
+        cartMessage.textContent = "❌ Erreur : le billet n'a pas pu être ajouté.";
+        cartMessage.style.color = "red";
       }
 
+      cartMessage.style.display = "block";
 
+      // Faire disparaître le message après 3 secondes
+      setTimeout(() => {
+        cartMessage.style.display = "none";
+      }, 3000);
     })
-
-
-
+    .catch(error => {
+      console.error("Erreur lors de l'ajout au panier :", error);
+    });
 }
 //ok

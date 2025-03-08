@@ -27,26 +27,36 @@
       </div>
 
       <section id="results-card" class="results-card">
-        <img
-          src="./images/train.png"
-          alt="Dessin de train"
-          class="train-illustration"
-        />
+        <img src="./images/train.png" alt="Dessin de train" class="train-illustration" />
         <div class="separator green"></div>
         <p>C'est l'heure de réserver votre futur voyage</p>
       </section>
+      
+      <!-- Message d'ajout au panier (plus visible ici) -->
+      <p id="cart-message" style="display: none; font-weight: bold; text-align: center;"></p>
+
 
       <section class="search-card">
-        <input type="text" id="departure" placeholder="Lieu de départ" value="Lyon" />
-        <input type="text" id="arrival" placeholder="Lieu d'arrivée" value="Paris" />
+        <input
+          type="text"
+          id="departure"
+          placeholder="Lieu de départ"
+          value="Lyon"
+        />
+        <input
+          type="text"
+          id="arrival"
+          placeholder="Lieu d'arrivée"
+          value="Paris"
+        />
         <div class="date-picker">
-        <input type="date" id="date" value="2025-03-05" />
+          <input type="date" id="date" value="2025-03-05" />
         </div>
         <button id="searchButton">Rechercher</button>
       </section>
     </main>
 
-    <script src="../frontend/scripts/script.js"></script>
+    <script src="./scripts/script.js"></script>
     <!-- Chargement des scripts JavaScript -->
   </body>
 </html>
