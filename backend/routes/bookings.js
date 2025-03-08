@@ -2,12 +2,6 @@ var express = require("express");
 var router = express.Router();
 require('../models/connection');
 const Cart = require('../models/carts');
-<<<<<<< HEAD
-
-
-router.get("/", (req, res) => {
-  Cart.find()
-=======
 const moment = require('moment');
 //var mongoose = require('mongoose');
 
@@ -29,7 +23,6 @@ router.get("/", (req, res) => { //:id
     arrival: { $regex: new RegExp(tempObject.arrival, 'i') },
     // Recherche entre le début et la fin de la journée
     date: { $gte: moment(date).startOf('day'), $lte: moment(date).endOf('day') }}) */
->>>>>>> d1f0ce045472716df5961dbc72680ef2b0d0ced1
     .then(data => {
       console.log(data);
       if (data.length > 0) { 
