@@ -22,9 +22,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/trip', tripRouter);
-app.use('/cart', cartRouter)
-app.use('/bookings',bookingsRouter)
-
+app.use('/cart', cartRouter);
+app.use('/bookings', bookingsRouter);
 
 
 module.exports = app;
