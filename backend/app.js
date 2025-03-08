@@ -8,7 +8,7 @@ require('./models/connection');
 
 var tripRouter = require('./routes/trip');
 var cartRouter = require('./routes/cart');
-
+var bookingsRouter = require('./routes/bookings');
 
 var app = express();
 
@@ -22,8 +22,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/trip', tripRouter);
-app.use('/cart', cartRouter)
-
+app.use('/cart', cartRouter);
+app.use('/bookings', bookingsRouter);
 
 
 module.exports = app;

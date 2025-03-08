@@ -91,7 +91,10 @@ function removeFromCart(idTripDelete) {
 
 //Appel de la fonction pour afficher la liste des voyages contenus dans le panier
 displayCart();
-
+document.getElementById("payButton").addEventListener("click", function() {
+  localStorage.setItem("paymentInitiated", "true");
+  window.location.href = "bookings.html";
+});
 // Ajouter des trajets au panier (exemples)
 //addToCart("Paris", "Lyon", "20:09", 103);
 //addToCart("Lyon", "Marseille", "15:45", 89);

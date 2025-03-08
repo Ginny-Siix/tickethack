@@ -27,7 +27,7 @@ function fetchBookings() {
             //console.log(dataArray[0]);
             //console.log(dataArray[1]);
             //let iterableArray = Object.values(dataArray[1]);
-            bookingsContainer.innerHTML = `<div class="booking-title">My bookings</div>`;
+            bookingsContainer.innerHTML = `<div class="booking-title">Mes réservations</div>`;
             for (let elem of data) {
                 //console.log(elem);
                 if (data) {
@@ -55,12 +55,12 @@ function fetchBookings() {
                     if (emptyMessage) {emptyMessage.style.display = "none"};
                 }
                     else {
-                        bookingsContainer.innerHTML = "No bookings found.";
+                        bookingsContainer.innerHTML = "Pas de réservations.";
                     }
             }
             bookingsContainer.innerHTML += `
             <div class="separator"></div>
-            <a href="#" class="footer-text">Enjoy your travels with Tickethack!</a>`
+            <a href="#" class="footer-text">Profitez de vos voyages avec Tickethack !</a>`
             })
             .catch((error) => {
                 bookingsContainer.innerHTML = "Error fetching bookings. Please try again.";
@@ -68,7 +68,12 @@ function fetchBookings() {
             });
 }
 
-
-loadBookingsBtn.addEventListener('click', fetchBookings);
+document.addEventListener("DOMContentLoaded", function() {
+    if (localStorage.getItem("paymentInitiated") === "true") {
+        fetchBookings();
+        localStorage.removeItem("paymentInitiated");
+    }
+});
+//loadBookingsBtn.addEventListener('click', fetchBookings);
 
 
