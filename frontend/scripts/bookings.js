@@ -5,41 +5,43 @@
 
 const bookingsContainer = document.getElementById("bookingsContainer");
 const loadBookingsBtn = document.getElementById("loadBookingsBtn");
-const emptyMessage = document.getElementById("emptyMessage"); // 
-
+const emptyMessage = document.getElementById("emptyMessage"); //
 
 const bookingData = {
-    departure: "Paris",
-    arrival: "Lyon",
-    date: "2025-03-03",
-    price: 30
+  departure: "Paris",
+  arrival: "Lyon",
+  date: "2025-03-03",
+  price: 30,
 };
 //tripId = '67c71793f2cecf2d3cdda3d8';
 function fetchBookings() {
-    //
-    //bookingsContainer.innerHTML = "Loading...";
+  //
+  //bookingsContainer.innerHTML = "Loading...";
 
-    fetch("http://localhost:3000/bookings") //$//{tripId}
-        .then((response) => response.json())
-        .then((data) => {
-            //let dataArray = Object.values(data);
-            //console.log(dataArray.length);
-            //console.log(dataArray[0]);
-            //console.log(dataArray[1]);
-            //let iterableArray = Object.values(dataArray[1]);
-            bookingsContainer.innerHTML = `<div class="booking-title">Mes réservations</div>`;
-            for (let elem of data) {
-                //console.log(elem);
-                if (data) {
-                    console.log(elem);
-                    bookingsContainer.innerHTML += "";
-                    const bookingDate = new Date(elem.date);
-                    const hoursUntil = Math.round((bookingDate - new Date()) / (1000 * 60 * 60));
-                    const departureText = hoursUntil >= 0
-                        ? `Departure in ${hoursUntil} hours`
-                        : `Departed ${Math.abs(hoursUntil)} hours ago`;
+  fetch("http://localhost:3000/bookings") //$//{tripId}
+    .then((response) => response.json())
+    .then((data) => {
+      //let dataArray = Object.values(data);
+      //console.log(dataArray.length);
+      //console.log(dataArray[0]);
+      //console.log(dataArray[1]);
+      //let iterableArray = Object.values(dataArray[1]);
+      bookingsContainer.innerHTML = `<div class="booking-title">Mes réservations</div>`;
+      for (let elem of data) {
+        //console.log(elem);
+        if (data) {
+          console.log(elem);
+          bookingsContainer.innerHTML += "";
+          const bookingDate = new Date(elem.date);
+          const hoursUntil = Math.round(
+            (bookingDate - new Date()) / (1000 * 60 * 60)
+          );
+          const departureText =
+            hoursUntil >= 0
+              ? `Departure in ${hoursUntil} hours`
+              : `Departed ${Math.abs(hoursUntil)} hours ago`;
 
-                    bookingsContainer.innerHTML += `
+          bookingsContainer.innerHTML += `
                     <div id="booking-container">
                         
                         <div class="booking-box">
@@ -52,28 +54,28 @@ function fetchBookings() {
                         
                     </div>
                 `;
-                    if (emptyMessage) {emptyMessage.style.display = "none"};
-                }
-                    else {
-                        bookingsContainer.innerHTML = "Pas de réservations.";
-                    }
-            }
-            bookingsContainer.innerHTML += `
+          if (emptyMessage) {
+            emptyMessage.style.display = "none";
+          }
+        } else {
+          bookingsContainer.innerHTML = "Pas de réservations.";
+        }
+      }
+      bookingsContainer.innerHTML += `
             <div class="separator"></div>
-            <a href="#" class="footer-text">Profitez de vos voyages avec Tickethack !</a>`
-            })
-            .catch((error) => {
-                bookingsContainer.innerHTML = "Error fetching bookings. Please try again.";
-                console.error('Fetch error:', error);
-            });
+            <a href="#" class="footer-text">Profitez de vos voyages avec Tickethack !</a>`;
+    })
+    .catch((error) => {
+      bookingsContainer.innerHTML =
+        "Error fetching bookings. Please try again.";
+      console.error("Fetch error:", error);
+    });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    if (localStorage.getItem("paymentInitiated") === "true") {
-        fetchBookings();
-        localStorage.removeItem("paymentInitiated");
-    }
+document.addEventListener("DOMContentLoaded", function () {
+  if (localStorage.getItem("paymentInitiated") === "true") {
+    fetchBookings();
+    // localStorage.removeItem("paymentInitiated");
+  }
 });
 //loadBookingsBtn.addEventListener('click', fetchBookings);
-
-
