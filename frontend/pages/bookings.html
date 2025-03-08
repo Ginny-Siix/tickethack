@@ -1,10 +1,11 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réservations</title>
-    <link rel="stylesheet" href="../styles/bookings.css">
     <link rel="stylesheet" href="../styles/common.css">
+    <link rel="stylesheet" href="../styles/bookings.css">
 </head>
 <body data-page="bookings">
     <header>
@@ -17,8 +18,9 @@
     <main>
         <section class="bookings">
             <h2>Trajets Réservés</h2>
-            <div id="bookingsContainer">
-                
+            <button id="loadBookingsBtn">Load Bookings</button>
+            <div id="bookingsContainer" class="bookings-container">
+                <!-- Booking items will be dynamically added here -->
             </div>
         </section>
     </main>
