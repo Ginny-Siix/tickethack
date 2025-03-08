@@ -43,7 +43,7 @@ router.post('/add/:id', (req, res) => {
 
                 newTrip.save().then(newTrip => {
                   console.log('Trip well added : ', dataTrip);
-                  res.json({ result: true });
+                  res.json({ result: true, cart: dataCart });
                 })
               }
             })
