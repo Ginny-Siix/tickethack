@@ -66,10 +66,10 @@ function displayTrips(trips) {
 
     tripsContainer.innerHTML += `
       <div class="trip-item">
-        <p><strong>Départ :</strong> ${trip.departure}</p>
-        <p><strong>Arrivée :</strong> ${trip.arrival}</p>
-        <p><strong>Heure :</strong> ${formattedTime}</p>
-        <p><strong>Prix :</strong> ${trip.price} €</p>
+        <p><strong></strong> ${trip.departure}</p>
+        <p><strong></strong> ${trip.arrival}</p>
+        <p><strong></strong> ${formattedTime}</p>
+        <p><strong></strong> ${trip.price} €</p>
         <button class="add-to-cart" onclick="addToCart('${trip._id}')">Ajouter au panier</button>
       </div>`;
   });

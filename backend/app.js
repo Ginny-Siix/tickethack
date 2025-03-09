@@ -12,6 +12,7 @@ var bookingsRouter = require('./routes/bookings');
 
 var app = express();
 
+app.use(express.json()); // Ajoute ce middleware avant tes routes
 const cors = require('cors');
 app.use(cors());
 
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/trip', tripRouter);
 app.use('/cart', cartRouter);
 app.use('/bookings', bookingsRouter);
+
 
 
 module.exports = app;

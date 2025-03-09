@@ -34,11 +34,14 @@ router.post("/pay", async (req, res) => {
 
     res.json({
       result: true,
-      message: "Les billets ont été validés et transférés dans les réservations.",
+      message:
+        "Les billets ont été validés et transférés dans les réservations.",
     });
   } catch (error) {
     console.error("Erreur lors du transfert vers les réservations:", error);
-    res.status(500).json({ result: false, error: "Erreur serveur: " + error.message });
+    res
+      .status(500)
+      .json({ result: false, error: "Erreur serveur: " + error.message });
   }
 });
 
@@ -55,7 +58,9 @@ router.put("/archive/:id", async (req, res) => {
     );
 
     if (!updatedBooking) {
-      return res.status(404).json({ result: false, error: "Réservation non trouvée" });
+      return res
+        .status(404)
+        .json({ result: false, error: "Réservation non trouvée" });
     }
 
     res.json({
@@ -65,7 +70,9 @@ router.put("/archive/:id", async (req, res) => {
     });
   } catch (error) {
     console.error("Erreur lors de l'archivage de la réservation :", error);
-    res.status(500).json({ result: false, error: "Erreur serveur : " + error.message });
+    res
+      .status(500)
+      .json({ result: false, error: "Erreur serveur : " + error.message });
   }
 });
 
@@ -84,4 +91,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.delete("/delete", (req, res) => {
+  const { ids } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Aucun ID fourni." });
+  }
+
+  Booking.deleteMany({ _id: { $in: ids } })
+    .then(() => {
+      res.json({ success: true });
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la suppression des réservations :", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Erreur lors de la suppression." });
+    });
+});
 module.exports = router; // Exporter le router
