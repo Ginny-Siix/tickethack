@@ -1,21 +1,8 @@
 // Variables pour les éléments HTML
 const cartContainer = document.getElementById("cartContainer");
 const totalPriceElement = document.getElementById("totalPrice");
-//let cartItems = []; // Tableau pour stocker les éléments du panier
 
-// Exemple de fonction pour ajouter un trajet au panier
-/* function addToCart(departure, arrival, time, price) {
-  const cartItem = {
-    departure,
-    arrival,
-    time,
-    date,
-    price,
-  };
 
-  //cartItems.push(cartItem);
-  displayCart();
-} */
 
 // Fonction pour afficher les trajets dans le panier
 function displayCart() {
@@ -31,8 +18,6 @@ function displayCart() {
       if (data.result) {
 
         data.cart.forEach((cart) => {
-          //const cartItemDiv = document.createElement("div");
-          //cartItemDiv.classList.add("cart-item");
           const tripDate = new Date(cart.date);
 
           // Récupérer l'heure et les minutes en UTC 
@@ -74,7 +59,7 @@ function displayCart() {
 
 // Fonction pour supprimer un trajet du panier
 function removeFromCart(idTripDelete) {
-  console.log('HELLO', idTripDelete);
+
   fetch(`http://localhost:3000/cart/delete/${idTripDelete}`, {
     method: 'DELETE',
   })
@@ -95,6 +80,3 @@ document.getElementById("payButton").addEventListener("click", function() {
   localStorage.setItem("paymentInitiated", "true");
   window.location.href = "bookings.html";
 });
-// Ajouter des trajets au panier (exemples)
-//addToCart("Paris", "Lyon", "20:09", 103);
-//addToCart("Lyon", "Marseille", "15:45", 89);

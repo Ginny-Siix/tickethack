@@ -10,7 +10,7 @@ router.post("/add/:id", async (req, res) => {
   try {
     const tripID = req.params.id;
     const objectId = new mongoose.Types.ObjectId(tripID);
-    console.log("Converted ObjectId: ", objectId);
+
 
     if (!tripID) {
       return res.json({ result: false, error: "Missing or empty fields" });
@@ -44,7 +44,7 @@ router.post("/add/:id", async (req, res) => {
     });
 
     await newTrip.save();
-    console.log("Trip well added:", newTrip);
+
     res.json({
       result: true,
       message: "Votre billet a été ajouté dans le panier",
@@ -76,15 +76,15 @@ router.delete("/delete/:id", async (req, res) => {
   try {
     const tripToBeDeleted = req.params.id;
     const objectId = new mongoose.Types.ObjectId(tripToBeDeleted);
-    console.log("Converted ObjectId: ", objectId);
+
 
     const data = await Cart.deleteOne({ _id: objectId });
 
     if (data.deletedCount > 0) {
-      console.log("Trip deleted:", tripToBeDeleted);
+
       res.json({ result: true, message: "Trip deleted from cart" });
     } else {
-      console.log("Trip not deleted:", data);
+
       res.json({ result: false, error: "Trip not found in cart" });
     }
   } catch (error) {

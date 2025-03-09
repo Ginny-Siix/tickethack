@@ -17,7 +17,7 @@ searchButton.addEventListener("click", function () {
   const departureValue = departureInput.value.trim().toLowerCase();
   const arrivalValue = arrivalInput.value.trim().toLowerCase();
   const dateValue = dateDepartureInput.value; // Récupère la date de départ
-  console.log("Bouton cliqué !", departureValue, arrivalValue, dateValue);
+  console.log(departureValue, arrivalValue, dateValue);
 
   if (departureValue === "" || arrivalValue === "" || dateValue === "") {
     emptyMessage.textContent =
@@ -75,15 +75,12 @@ function displayTrips(trips) {
 }
 
 function addToCart(tripId) {
-  console.log("Appel fonction addToCart");
-  console.log("trip id : ", tripId);
 
   fetch(`http://localhost:3000/cart/add/${tripId}`, {
     method: 'POST',
   })
     .then(response => response.json())
     .then(data => {
-      console.log("Réponse API :", data); // Debugging
       const cartMessage = document.getElementById("cart-message");
 
       if (data.result) {

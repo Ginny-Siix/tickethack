@@ -9,10 +9,6 @@ const moment = require('moment');
 //GET - Afficher la liste des voyages en fonction de la ville de départ et d'arrivée saisie par l'utilisateur
 router.get('/search', (req, res) => {
 
-    console.log('departureCity', req.query.departure);
-    console.log('arrivalCity', req.query.arrival);
-    console.log('dateTrip', req.query.date);
-
     // Vérifier que tous les élements sont renseignés et non vides
     if (!req.query.departure || !req.query.arrival || !req.query.date) {
         res.json({ result: false, error: 'Missing or empty fields' });
@@ -20,16 +16,12 @@ router.get('/search', (req, res) => {
     else {
         //convertir la date en entrée du router (qui est en format string) en date
         const date = req.query.date;
-        console.log(req.query.date);
+   
          // Définir la date de début et la date de fin de la journée du voyage 
         //const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // Début de la journée
         const startOfDay = moment(date).startOf('day');
         //const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // Fin de la journée
         const endOfDay = moment(date).endOf('day');
-        
-        console.log("Conversion date ", date);
-        console.log("startOfDay", startOfDay);
-        console.log("endOfDay", endOfDay);
         Trip.find({
             departure: { $regex: new RegExp(req.query.departure, 'i') },
             arrival: { $regex: new RegExp( req.query.arrival, 'i') },
@@ -38,7 +30,7 @@ router.get('/search', (req, res) => {
         })
             .sort({date: 'asc'})
             .then(data => {
-                console.log('list departures and arrivals', data);
+
                 if (data.length >0) {
 
                     res.json({ result: true, trips: data });

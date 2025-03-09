@@ -9,7 +9,7 @@ router.get("/", (req, res) => { //:id
   Cart.find()
 
     .then(data => {
-      console.log(data);
+
       if (data.length > 0) { //data.length > 0
         return res.json( data );
       }

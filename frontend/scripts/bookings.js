@@ -21,16 +21,11 @@ function fetchBookings() {
   fetch("http://localhost:3000/bookings") //$//{tripId}
     .then((response) => response.json())
     .then((data) => {
-      //let dataArray = Object.values(data);
-      //console.log(dataArray.length);
-      //console.log(dataArray[0]);
-      //console.log(dataArray[1]);
-      //let iterableArray = Object.values(dataArray[1]);
+
       bookingsContainer.innerHTML = `<div class="booking-title">Mes réservations</div>`;
       for (let elem of data) {
-        //console.log(elem);
         if (data) {
-          console.log(elem);
+
           bookingsContainer.innerHTML += "";
           const bookingDate = new Date(elem.date);
           const hoursUntil = Math.round(
@@ -75,7 +70,5 @@ function fetchBookings() {
 document.addEventListener("DOMContentLoaded", function () {
   if (localStorage.getItem("paymentInitiated") === "true") {
     fetchBookings();
-    // localStorage.removeItem("paymentInitiated");
   }
 });
-//loadBookingsBtn.addEventListener('click', fetchBookings);
