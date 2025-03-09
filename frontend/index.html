@@ -27,36 +27,57 @@
       </div>
 
       <section id="results-card" class="results-card">
-        <img src="./images/train.png" alt="Dessin de train" class="train-illustration" />
+        <img
+          src="./images/train.png"
+          alt="Dessin de train"
+          class="train-illustration"
+        />
         <div class="separator green"></div>
         <p>C'est l'heure de réserver votre futur voyage</p>
       </section>
-      
-      <!-- Message d'ajout au panier (plus visible ici) -->
-      <p id="cart-message" style="display: none; font-weight: bold; text-align: center;"></p>
 
+      <!-- Message d'ajout au panier (plus visible ici) -->
+      <p
+        id="cart-message"
+        style="display: none; font-weight: bold; text-align: center"
+      ></p>
 
       <section class="search-card">
+        <label for="departure" class="sr-only">Lieu de départ</label>
         <input
           type="text"
           id="departure"
           placeholder="Lieu de départ"
           value="Lyon"
+          required
         />
+
+        <label for="arrival" class="sr-only">Lieu d'arrivée</label>
         <input
           type="text"
           id="arrival"
           placeholder="Lieu d'arrivée"
           value="Paris"
+          required
         />
+
         <div class="date-picker">
-          <input type="date" id="date" value="2025-03-05" />
+          <label for="date" class="sr-only">Date du trajet</label>
+          <input
+            type="date"
+            id="date"
+            value="2025-03-05"
+            min="2025-03-05"
+            required
+          />
         </div>
-        <button id="searchButton">Rechercher</button>
+
+        <button id="searchButton" aria-label="Rechercher des trajets">
+          Rechercher
+        </button>
       </section>
     </main>
 
-    <script src="./scripts/script.js"></script>
-    <!-- Chargement des scripts JavaScript -->
+    <script src="./scripts/script.js" defer></script>
   </body>
 </html>

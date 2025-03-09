@@ -1,47 +1,47 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-require('../models/connection');
-const Trip = require('../models/trips');
-//const moment = require('moment-timezone');
-const moment = require('moment');
+require("../models/connection"); // Import de la connexion à la base de données
+const Trip = require("../models/trips"); // Import du modèle de trajet
+const moment = require("moment"); // Import de moment.js pour la gestion des dates
 
+// GET - Afficher la liste des voyages en fonction des critères de recherche
+router.get("/search", async (req, res) => {
+  try {
+    // Récupération des paramètres de la requête
+    const { departure, arrival, date } = req.query;
 
-//GET - Afficher la liste des voyages en fonction de la ville de départ et d'arrivée saisie par l'utilisateur
-router.get('/search', (req, res) => {
-
-    // Vérifier que tous les élements sont renseignés et non vides
-    if (!req.query.departure || !req.query.arrival || !req.query.date) {
-        res.json({ result: false, error: 'Missing or empty fields' });
+    // Vérifier que tous les champs sont fournis et non vides
+    if (!departure || !arrival || !date) {
+      return res.json({ result: false, error: "Missing or empty fields" });
     }
-    else {
-        //convertir la date en entrée du router (qui est en format string) en date
-        const date = req.query.date;
-   
-         // Définir la date de début et la date de fin de la journée du voyage 
-        //const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // Début de la journée
-        const startOfDay = moment(date).startOf('day');
-        //const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // Fin de la journée
-        const endOfDay = moment(date).endOf('day');
-        Trip.find({
-            departure: { $regex: new RegExp(req.query.departure, 'i') },
-            arrival: { $regex: new RegExp( req.query.arrival, 'i') },
-            // Recherche entre le début et la fin de la journée
-            date: {  $gte: startOfDay, $lte: endOfDay }
-        })
-            .sort({date: 'asc'})
-            .then(data => {
 
-                if (data.length >0) {
-
-                    res.json({ result: true, trips: data });
-                }
-
-                else {
-                    res.json({ result: false, error: "No trips found" });
-                }
-            })
+    // Vérifier si la date fournie est valide (format attendu : YYYY-MM-DD)
+    const parsedDate = moment(date, "YYYY-MM-DD", true);
+    if (!parsedDate.isValid()) {
+      return res.json({ result: false, error: "Invalid date format" });
     }
-})
 
+    // Définir les limites de la journée recherchée (00:00 à 23:59)
+    const startOfDay = parsedDate.startOf("day").toDate(); // Début de la journée
+    const endOfDay = parsedDate.endOf("day").toDate(); // Fin de la journée
 
-module.exports = router;
+    // Rechercher les trajets qui correspondent aux critères
+    const trips = await Trip.find({
+      departure: { $regex: new RegExp(departure, "i") }, // Recherche insensible à la casse sur la ville de départ
+      arrival: { $regex: new RegExp(arrival, "i") }, // Recherche insensible à la casse sur la ville d'arrivée
+      date: { $gte: startOfDay, $lte: endOfDay }, // Vérifier que la date est bien dans la journée
+    }).sort({ date: "asc" }); // Trier les résultats par date croissante
+
+    // Vérifier si des trajets ont été trouvés
+    if (trips.length > 0) {
+      res.json({ result: true, trips }); // Retourner les trajets trouvés
+    } else {
+      res.json({ result: false, error: "No trips found" }); // Aucun trajet trouvé
+    }
+  } catch (error) {
+    console.error("Erreur lors de la recherche des voyages:", error);
+    res.status(500).json({ result: false, error: "Internal server error" }); // Gérer les erreurs serveur
+  }
+});
+
+module.exports = router; // Exporter le router pour utilisation dans l'application principale

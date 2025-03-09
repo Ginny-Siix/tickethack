@@ -1,29 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Réservations</title>
-    <link rel="stylesheet" href="../styles/common.css">
-    <link rel="stylesheet" href="../styles/bookings.css">
-</head>
-<body data-page="bookings">
+    <link rel="stylesheet" href="../styles/common.css" />
+    <link rel="stylesheet" href="../styles/bookings.css" />
+  </head>
+  <body data-page="bookings">
     <header>
-        <h1>Vos Réservations</h1>
-        <nav>
-            <a href="../index.html">Accueil</a>
-            <a href="cart.html">Panier</a>
-        </nav>
+      <a href="../index.html" title="return accueil">
+        <h1 class="logo">Tickethack</h1>
+      </a>
+      <nav>
+        <a href="../index.html">Accueil</a>
+        <a href="cart.html">Panier</a>
+      </nav>
     </header>
     <main>
-        <section class="bookings">
-            <h2>Trajets Réservés</h2>
-            
-            <div id="bookingsContainer" class="bookings-container">
-                <!-- Booking items will be dynamically added here -->
-            </div>
-        </section>
+      <section class="bookings">
+        <h2>Trajets Réservés</h2>
+
+        <div id="bookingsContainer" class="bookings-container">
+          <!-- Booking items will be dynamically added here -->
+        </div>
+        <div id="bookingContainer"></div>
+        <!-- Affiche les réservations non archivées -->
+
+        <button id="showArchivedButton">Afficher les archives</button>
+
+        <div id="archivedContainer" style="display: none">
+          <!-- Les réservations archivées s'afficheront ici -->
+        </div>
+      </section>
     </main>
     <script src="../scripts/bookings.js"></script>
-</body>
+  </body>
 </html>

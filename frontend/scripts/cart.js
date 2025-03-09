@@ -1,82 +1,108 @@
-// Variables pour les éléments HTML
+// Sélection des éléments HTML
 const cartContainer = document.getElementById("cartContainer");
 const totalPriceElement = document.getElementById("totalPrice");
-
-
+const cartTotalSection = document.getElementById("cartTotalSection");
+const payButton = document.getElementById("payButton");
 
 // Fonction pour afficher les trajets dans le panier
 function displayCart() {
-  // Vider le panier avant de réafficher les éléments
+  // Réinitialisation du contenu du panier
   cartContainer.innerHTML = "";
-
-  // initialisation de la variable pour afficher le prix total du panier
-  let total = 0;
+  let total = 0; // Initialisation du prix total
 
   fetch("http://localhost:3000/cart")
-    .then(response => response.json())
-    .then(data => {
-      if (data.result) {
-
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.result && data.cart.length > 0) {
         data.cart.forEach((cart) => {
           const tripDate = new Date(cart.date);
 
-          // Récupérer l'heure et les minutes en UTC 
-          let hours = tripDate.getUTCHours();
-          let minutes = tripDate.getUTCMinutes();
+          // Formatage de l'heure et des minutes
+          const formattedTime = tripDate.toLocaleTimeString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
 
-          const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+          // Formatage de la date
+          const formattedDate = tripDate.toLocaleDateString("fr-FR");
 
-          // Récupérer les jours, mois et année
-          const day = String(tripDate.getDate()).padStart(2, '0');  // Ajouter un zéro devant si nécessaire
-          const month = String(tripDate.getMonth() + 1).padStart(2, '0');  // Les mois commencent à 0 (Jan = 0, Feb = 1, etc.)
-          const year = tripDate.getFullYear();
+          // Formatage des villes (majuscule initiale)
+          const formattedDeparture =
+            cart.departure.charAt(0).toUpperCase() +
+            cart.departure.slice(1).toLowerCase();
+          const formattedArrival =
+            cart.arrival.charAt(0).toUpperCase() +
+            cart.arrival.slice(1).toLowerCase();
 
-          const formattedDate = `${day}/${month}/${year}`;
-
-          //Formatter pour les villes de départ et d'arrrivée ont la première lettre en majuscule et le reste en miniscule
-          const formattedDeparture = cart.departure.charAt(0).toUpperCase() + cart.departure.slice(1).toLowerCase();
-          const formattedArrival = cart.arrival.charAt(0).toUpperCase() + cart.arrival.slice(1).toLowerCase();
-
-
+          // Ajout de l'élément au panier
           cartContainer.innerHTML += `
-          <div class ="cart-item">
-            <p >${formattedDeparture} > ${formattedArrival}</p>
-            <p>${formattedDate} ${formattedTime}</p>
-            <p>${cart.price}€</p>
-            <button class="remove-button" onclick="removeFromCart('${cart._id}')">X</button>
+            <div class="cart-item">
+              <p>${formattedDeparture} > ${formattedArrival}</p>
+              <p>${formattedDate} ${formattedTime}</p>
+              <p>${cart.price}€</p>
+              <button class="remove-button" onclick="removeFromCart('${cart._id}')">X</button>
             </div>
           `;
 
-          total += cart.price; // Ajouter au total
-
+          total += cart.price; // Ajout au total
         });
-      
+
+        totalPriceElement.textContent = `${total}€`; // Mise à jour du prix total
+        cartTotalSection.style.display = "block"; // Afficher la section total
+      } else {
+        cartContainer.innerHTML = "<p>Aucun trajet dans votre panier.</p>";
+        cartTotalSection.style.display = "none"; // Cacher la section total
       }
-      totalPriceElement.textContent = total + "€";
-      document.getElementById("cartTotalSection").style.display = data.cart && data.cart.length ? "block" : "none"; // Afficher ou cacher la section total  
+    })
+    .catch((error) => {
+      console.error("Erreur lors du chargement du panier :", error);
+      cartContainer.innerHTML =
+        "<p>Erreur lors du chargement du panier. Veuillez réessayer.</p>";
     });
 }
 
 // Fonction pour supprimer un trajet du panier
 function removeFromCart(idTripDelete) {
-
   fetch(`http://localhost:3000/cart/delete/${idTripDelete}`, {
-    method: 'DELETE',
+    method: "DELETE",
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       if (data.result) {
-        displayCart();
-      }
-      else {
-        console.log("Erreur lors de la supression de l'élément")
+        displayCart(); // Rafraîchir le panier après suppression
+      } else {
+        console.error("Erreur lors de la suppression de l'élément");
       }
     })
+    .catch((error) => console.error("Erreur lors de la suppression :", error));
 }
 
-//Appel de la fonction pour afficher la liste des voyages contenus dans le panier
+// Nouvelle fonction pour valider les billets et les transférer vers les réservations
+function validateBookings() {
+  fetch("http://localhost:3000/bookings/pay", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.result) {
+        // Si les billets ont été transférés avec succès, rediriger vers la page des réservations
+        localStorage.setItem("paymentInitiated", "true");
+        window.location.href = "bookings.html"; // Ou mettre l'URL appropriée
+      } else {
+        alert(data.error || "Une erreur est survenue lors de la validation des billets.");
+      }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la validation des billets :", error);
+      alert("Erreur lors de la validation des billets.");
+    });
+}
+
+// Écouteur pour le bouton "Payer"
+payButton.addEventListener("click", validateBookings);
+
+// Chargement initial du panier
 displayCart();
-document.getElementById("payButton").addEventListener("click", function() {
-  localStorage.setItem("paymentInitiated", "true");
-  window.location.href = "bookings.html";
-});

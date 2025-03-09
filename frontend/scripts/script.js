@@ -5,21 +5,20 @@ const searchButton = document.getElementById("searchButton");
 const departureInput = document.getElementById("departure");
 const arrivalInput = document.getElementById("arrival");
 const dateDepartureInput = document.getElementById("date");
-const addToCartButton = document.querySelectorAll('.add-to-cart');
 const cartMessage = document.getElementById("cart-message");
 
-let allTrips = []; // Stocker tous les trajets ici
+let allTrips = []; // Stocke tous les trajets récupérés depuis l'API
 
-// Fonction pour charger les trajets au démarrage
-
-// Événement pour lancer la recherche
-searchButton.addEventListener("click", function () {
+// Événement pour lancer la recherche de trajets
+document.getElementById("searchButton").addEventListener("click", function () {
   const departureValue = departureInput.value.trim().toLowerCase();
   const arrivalValue = arrivalInput.value.trim().toLowerCase();
-  const dateValue = dateDepartureInput.value; // Récupère la date de départ
-  console.log(departureValue, arrivalValue, dateValue);
+  const dateValue = dateDepartureInput.value;
 
-  if (departureValue === "" || arrivalValue === "" || dateValue === "") {
+  console.log(departureValue, arrivalValue, dateValue); // Debugging
+
+  // Vérification que tous les champs sont remplis
+  if (!departureValue || !arrivalValue || !dateValue) {
     emptyMessage.textContent =
       "Veuillez renseigner un départ, une arrivée et une date de départ.";
     emptyMessage.style.display = "block";
@@ -27,83 +26,77 @@ searchButton.addEventListener("click", function () {
     return;
   }
 
+  // Requête à l'API pour chercher les trajets correspondants
   fetch(
     `http://localhost:3000/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`
   )
     .then((response) => response.json())
     .then((data) => {
       allTrips = data.trips;
+
       if (data.result) {
-        displayTrips(allTrips);
+        displayTrips(allTrips); // Affichage des trajets
       } else {
-        tripsContainer.innerHTML = "";
-        // Ajouter l'image et le message
         tripsContainer.innerHTML = `
           <div class="no-trips">
             <img src="./images/notfound.png" alt="Illustration du train" class="no-trips-img">
             <p>Aucun trajet disponible</p>
           </div>`;
-        emptyMessage.style.display = "none"; // Masquer le message d'erreur précédent
+        emptyMessage.style.display = "none";
       }
-    });
+    })
+    .catch((error) =>
+      console.error("Erreur lors de la récupération des trajets :", error)
+    );
 });
 
-// Fonction pour afficher les trajets
+// Fonction pour afficher les trajets récupérés
 function displayTrips(trips) {
-  tripsContainer.innerHTML = ""; // Vide l'affichage avant d'ajouter les nouveaux trajets
+  tripsContainer.innerHTML = ""; // Réinitialise le conteneur avant l'affichage
 
   trips.forEach((trip) => {
     const tripDate = new Date(trip.date);
-
-    // Récupérer l'heure et les minutes en UTC 
-    let hours = tripDate.getUTCHours();
-    let minutes = tripDate.getUTCMinutes();
-
-    // Format HH:MM (ajoute un zéro devant si nécessaire)
-    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-    const tripId = trip._id;
+    const formattedTime = `${tripDate
+      .getUTCHours()
+      .toString()
+      .padStart(2, "0")}:${tripDate
+      .getUTCMinutes()
+      .toString()
+      .padStart(2, "0")}`;
 
     tripsContainer.innerHTML += `
       <div class="trip-item">
-          <p><strong></strong> ${trip.departure}</p>
-          <p><strong></strong> ${trip.arrival}</p>
-          <p><strong></strong> ${formattedTime}</p>
-          <p><strong></strong> ${trip.price} €</p>
-          <button class="add-to-cart" onclick="addToCart('${tripId}')">Ajouter au panier</button>
+        <p><strong>Départ :</strong> ${trip.departure}</p>
+        <p><strong>Arrivée :</strong> ${trip.arrival}</p>
+        <p><strong>Heure :</strong> ${formattedTime}</p>
+        <p><strong>Prix :</strong> ${trip.price} €</p>
+        <button class="add-to-cart" onclick="addToCart('${trip._id}')">Ajouter au panier</button>
       </div>`;
   });
 }
 
+// Fonction pour ajouter un trajet au panier
 function addToCart(tripId) {
-
-  fetch(`http://localhost:3000/cart/add/${tripId}`, {
-    method: 'POST',
-  })
-    .then(response => response.json())
-    .then(data => {
-      const cartMessage = document.getElementById("cart-message");
-
+  fetch(`http://localhost:3000/cart/add/${tripId}`, { method: "POST" })
+    .then((response) => response.json())
+    .then((data) => {
       if (data.result) {
         cartMessage.textContent = "✅ Votre billet a été ajouté au panier !";
         cartMessage.style.color = "green";
-      } else if (data.error && data.error.toLowerCase().includes("ce billet existe déjà")) { 
-        // Vérifie si l'erreur retournée par l'API indique que le billet est déjà dans le panier
+      } else if (data.error?.toLowerCase().includes("ce billet existe déjà")) {
         cartMessage.textContent = "⚠️ Ce billet existe déjà dans votre panier.";
         cartMessage.style.color = "orange";
       } else {
-        cartMessage.textContent = "❌ Erreur : le billet n'a pas pu être ajouté.";
+        cartMessage.textContent =
+          "❌ Erreur : le billet n'a pas pu être ajouté.";
         cartMessage.style.color = "red";
       }
-
       cartMessage.style.display = "block";
 
       // Faire disparaître le message après 3 secondes
-      setTimeout(() => {
-        cartMessage.style.display = "none";
-      }, 3000);
+      setTimeout(() => (cartMessage.style.display = "none"), 3000);
     })
-    .catch(error => {
-      console.error("Erreur lors de l'ajout au panier :", error);
-    });
+    .catch((error) =>
+      console.error("Erreur lors de l'ajout au panier :", error)
+    );
 }
-//ok

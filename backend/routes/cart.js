@@ -5,12 +5,14 @@ const mongoose = require("mongoose");
 const Cart = require("../models/carts");
 const Trip = require("../models/trips");
 
-// ROUTE POST POUR AJOUTER UN VOYAGE DANS LE PANIER
+/**
+ * @route POST /cart/add/:id
+ * @desc Ajouter un voyage dans le panier
+ */
 router.post("/add/:id", async (req, res) => {
   try {
     const tripID = req.params.id;
     const objectId = new mongoose.Types.ObjectId(tripID);
-
 
     if (!tripID) {
       return res.json({ result: false, error: "Missing or empty fields" });
@@ -18,7 +20,6 @@ router.post("/add/:id", async (req, res) => {
 
     // Vérifier si le trajet existe dans la collection Trip
     const dataTrip = await Trip.findOne({ _id: objectId });
-
     if (!dataTrip) {
       return res.json({ result: false, error: "Trip not found" });
     }
@@ -44,7 +45,6 @@ router.post("/add/:id", async (req, res) => {
     });
 
     await newTrip.save();
-
     res.json({
       result: true,
       message: "Votre billet a été ajouté dans le panier",
@@ -55,11 +55,13 @@ router.post("/add/:id", async (req, res) => {
   }
 });
 
-// ROUTE GET POUR AFFICHER LE CONTENU DU PANIER
+/**
+ * @route GET /cart/
+ * @desc Récupérer le contenu du panier
+ */
 router.get("/", async (req, res) => {
   try {
     const data = await Cart.find().sort({ date: "asc" });
-
     if (data.length > 0) {
       res.json({ result: true, cart: data });
     } else {
@@ -71,20 +73,19 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ROUTE DELETE POUR SUPPRIMER UN TRAJET DU PANIER
+/**
+ * @route DELETE /cart/delete/:id
+ * @desc Supprimer un voyage du panier
+ */
 router.delete("/delete/:id", async (req, res) => {
   try {
     const tripToBeDeleted = req.params.id;
     const objectId = new mongoose.Types.ObjectId(tripToBeDeleted);
 
-
     const data = await Cart.deleteOne({ _id: objectId });
-
     if (data.deletedCount > 0) {
-
       res.json({ result: true, message: "Trip deleted from cart" });
     } else {
-
       res.json({ result: false, error: "Trip not found in cart" });
     }
   } catch (error) {
@@ -94,3 +95,4 @@ router.delete("/delete/:id", async (req, res) => {
 });
 
 module.exports = router;
+ 

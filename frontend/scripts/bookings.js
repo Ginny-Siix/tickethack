@@ -1,74 +1,82 @@
-// Redirection to the Bookings page
-//document.querySelector('#payButton').addEventListener('click', function () {});
-//window.location.href = 'pages/bookings.html';
-//let page = document.body.dataset.page;
+// Sélectionner les éléments HTML
+const bookingContainer = document.getElementById("bookingContainer");
+const archivedContainer = document.getElementById("archivedContainer");
+const showArchivedButton = document.getElementById("showArchivedButton");
 
-const bookingsContainer = document.getElementById("bookingsContainer");
-const loadBookingsBtn = document.getElementById("loadBookingsBtn");
-const emptyMessage = document.getElementById("emptyMessage"); //
-
-const bookingData = {
-  departure: "Paris",
-  arrival: "Lyon",
-  date: "2025-03-03",
-  price: 30,
-};
-//tripId = '67c71793f2cecf2d3cdda3d8';
-function fetchBookings() {
-  //
-  //bookingsContainer.innerHTML = "Loading...";
-
-  fetch("http://localhost:3000/bookings") //$//{tripId}
+// Fonction pour afficher les réservations
+function displayBookings() {
+  fetch("http://localhost:3000/bookings")
     .then((response) => response.json())
     .then((data) => {
+      if (data.length > 0) {
+        bookingContainer.innerHTML = ""; // Réinitialiser l'affichage des réservations
+        data.forEach((booking) => {
+          const tripDate = new Date(booking.date);
 
-      bookingsContainer.innerHTML = `<div class="booking-title">Mes réservations</div>`;
-      for (let elem of data) {
-        if (data) {
+          // Formatage de la date et de l'heure
+          const formattedDate = tripDate.toLocaleDateString("fr-FR");
+          const formattedTime = tripDate.toLocaleTimeString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
 
-          bookingsContainer.innerHTML += "";
-          const bookingDate = new Date(elem.date);
-          const hoursUntil = Math.round(
-            (bookingDate - new Date()) / (1000 * 60 * 60)
-          );
-          const departureText =
-            hoursUntil >= 0
-              ? `Departure in ${hoursUntil} hours`
-              : `Departed ${Math.abs(hoursUntil)} hours ago`;
-
-          bookingsContainer.innerHTML += `
-                    <div id="booking-container">
-                        
-                        <div class="booking-box">
-                            <span>${elem.departure} > ${elem.arrival}</span>
-                            <span>${elem.date.split("T")[0]}</span>
-                            <span>${elem.price}€</span>
-                            <span>${departureText}</span>
-                        </div>
-                        
-                        
-                    </div>
-                `;
-          if (emptyMessage) {
-            emptyMessage.style.display = "none";
+          // Afficher les réservations non archivées
+          if (!booking.archived) {
+            bookingContainer.innerHTML += `
+              <div class="booking-item">
+                <p>${booking.departure} > ${booking.arrival}</p>
+                <p>${formattedDate} ${formattedTime}</p>
+                <p>${booking.price}€</p>
+                <button onclick="archiveBooking('${booking._id}')">Archiver</button> <!-- Bouton d'archivage -->
+              </div>
+            `;
+          } else {
+            archivedContainer.innerHTML += `
+              <div class="archived-item">
+                <p>${booking.departure} > ${booking.arrival}</p>
+                <p>${formattedDate} ${formattedTime}</p>
+                <p>${booking.price}€</p>
+              </div>
+            `;
           }
-        } else {
-          bookingsContainer.innerHTML = "Pas de réservations.";
-        }
+        });
+      } else {
+        bookingContainer.innerHTML = "<p>Aucune réservation trouvée.</p>";
       }
-      bookingsContainer.innerHTML += `
-            <div class="separator"></div>
-            <a href="#" class="footer-text">Profitez de vos voyages avec Tickethack !</a>`;
     })
     .catch((error) => {
-      bookingsContainer.innerHTML =
-        "Error fetching bookings. Please try again.";
-      console.error("Fetch error:", error);
+      console.error("Erreur lors du chargement des réservations :", error);
+      bookingContainer.innerHTML = "<p>Erreur lors du chargement des réservations.</p>";
     });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  if (localStorage.getItem("paymentInitiated") === "true") {
-    fetchBookings();
-  }
-});
+// Fonction pour archiver une réservation
+function archiveBooking(bookingId) {
+  fetch(`http://localhost:3000/bookings/archive/${bookingId}`, {
+    method: "PUT",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.result) {
+        displayBookings(); // Rafraîchir les réservations après archivage
+        alert("Réservation archivée avec succès !");
+      } else {
+        alert("Erreur lors de l'archivage de la réservation.");
+      }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de l'archivage :", error);
+      alert("Erreur lors de l'archivage de la réservation.");
+    });
+}
+
+// Fonction pour afficher/masquer les réservations archivées
+function toggleArchived() {
+  archivedContainer.style.display = archivedContainer.style.display === "none" ? "block" : "none";
+}
+
+// Écouteur pour afficher/masquer les réservations archivées
+showArchivedButton.addEventListener("click", toggleArchived);
+
+// Chargement initial des réservations
+displayBookings();
