@@ -22,11 +22,11 @@ const bookingsRouter = require("./routes/bookings");
 
 // Configuration CORS
 const cors = require("cors");
-// app.use(
-//   cors({
-//     origin: "https://tickethack-git-main-ginny-siixs-projects.vercel.app", // Remplace par l'URL de ton front-end
-//   })
-// );
+app.use(
+  cors({
+    origin: "https://tickethack-frontend-ashy-seven.vercel.app", // Remplace par l'URL de ton front-end
+  })
+);
 
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
