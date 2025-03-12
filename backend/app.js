@@ -4,6 +4,11 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 require('dotenv').config();  // Charge les variables d'environnement
 
+app.get('/', (req, res) => {
+  console.log('Request received');  // Ajoute des logs ici
+  res.send('Hello world');
+});
+
 
 // Importation de la connexion à la base de données
 require("./models/connection");
