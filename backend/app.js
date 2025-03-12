@@ -19,7 +19,7 @@ const app = express();
 const cors = require("cors");
 // app.use(
 //   cors({
-//     origin: "https://tickethack-7w5i.vercel.app", // Remplace par l'URL de ton front-end
+//     origin: "https://tickethack-git-main-ginny-siixs-projects.vercel.app", // Remplace par l'URL de ton front-end
 //   })
 // );
 
