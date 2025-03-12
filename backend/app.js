@@ -17,11 +17,11 @@ const app = express();
 
 // Configuration CORS
 const cors = require("cors");
-app.use(
-  cors({
-    origin: "https://tickethack-7w5i.vercel.app", // Remplace par l'URL de ton front-end
-  })
-);
+// app.use(
+//   cors({
+//     origin: "https://tickethack-7w5i.vercel.app", // Remplace par l'URL de ton front-end
+//   })
+// );
 
 
 
