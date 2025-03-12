@@ -28,7 +28,7 @@ document.getElementById("searchButton").addEventListener("click", function () {
 
   // Requête à l'API pour chercher les trajets correspondants
   fetch(
-    `tickethack-two.vercel.app/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`
+    `https://tickethack-two.vercel.app/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -77,7 +77,7 @@ function displayTrips(trips) {
 
 // Fonction pour ajouter un trajet au panier
 function addToCart(tripId) {
-  fetch(`tickethack-two.vercel.app/cart/add/${tripId}`, { method: "POST" })
+  fetch(`https://tickethack-two.vercel.app/cart/add/${tripId}`, { method: "POST" })
     .then((response) => response.json())
     .then((data) => {
       if (data.result) {
