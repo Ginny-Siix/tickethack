@@ -13,7 +13,7 @@ const cartMessage = document.getElementById("cart-message");
 let allTrips = []; // Stocke tous les trajets récupérés depuis l'API
 
 // Événement pour lancer la recherche de trajets
-document.getElementById("searchButton").addEventListener("click", function () {
+searchButton.addEventListener("click", function () {
   const departureValue = departureInput.value.trim().toLowerCase();
   const arrivalValue = arrivalInput.value.trim().toLowerCase();
   const dateValue = dateDepartureInput.value;
@@ -34,11 +34,15 @@ document.getElementById("searchButton").addEventListener("click", function () {
     `${apiUrl}/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`,
     { method: "GET" }
   )
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des trajets.");
+      }
+      return response.json();
+    })
     .then((data) => {
-      allTrips = data.trips;
-
       if (data.result) {
+        allTrips = data.trips;
         displayTrips(allTrips); // Affichage des trajets
       } else {
         tripsContainer.innerHTML = ` 
@@ -49,9 +53,11 @@ document.getElementById("searchButton").addEventListener("click", function () {
         emptyMessage.style.display = "none";
       }
     })
-    .catch((error) =>
-      console.error("Erreur lors de la récupération des trajets :", error)
-    );
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des trajets :", error);
+      tripsContainer.innerHTML = `<p>Erreur lors de la récupération des trajets. Veuillez réessayer.</p>`;
+      emptyMessage.style.display = "none";
+    });
 });
 
 // Fonction pour afficher les trajets récupérés
@@ -84,7 +90,12 @@ function addToCart(tripId) {
   fetch(`${apiUrl}/cart/add/${tripId}`, {
     method: "POST",
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'ajout au panier.");
+      }
+      return response.json();
+    })
     .then((data) => {
       if (data.result) {
         cartMessage.textContent = "✅ Votre billet a été ajouté au panier !";
@@ -102,7 +113,11 @@ function addToCart(tripId) {
       // Faire disparaître le message après 3 secondes
       setTimeout(() => (cartMessage.style.display = "none"), 3000);
     })
-    .catch((error) =>
-      console.error("Erreur lors de l'ajout au panier :", error)
-    );
+    .catch((error) => {
+      console.error("Erreur lors de l'ajout au panier :", error);
+      cartMessage.textContent = "❌ Erreur lors de l'ajout au panier.";
+      cartMessage.style.color = "red";
+      cartMessage.style.display = "block";
+      setTimeout(() => (cartMessage.style.display = "none"), 3000);
+    });
 }

@@ -1,5 +1,5 @@
 // Définir l'URL de l'API
-const apiUrl = "https://tickethack-two.vercel.app";  // Adresse de ton back-end
+const apiUrl = "https://tickethack-two.vercel.app"; // Adresse de ton back-end
 
 // Sélection des éléments HTML
 const cartContainer = document.getElementById("cartContainer");
