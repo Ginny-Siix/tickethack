@@ -24,7 +24,7 @@ const bookingsRouter = require("./routes/bookings");
 const cors = require("cors");
 app.use(
   cors({
-    origin: "https://tickethack-frontend-ashy-seven.vercel.app", // Remplace par l'URL de ton front-end
+    origin: "tickethack-frontend-git-main-ginny-siixs-projects.vercel.app", // Remplace par l'URL de ton front-end
   })
 );
 
