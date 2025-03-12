@@ -1,19 +1,18 @@
-require('dotenv').config();  // Charge les variables d'environnement depuis le fichier .env
-const mongoose = require('mongoose');
+const mongoose = require("mongoose"); // Import de mongoose
+require("dotenv").config(); // Charge les variables d'environnement
 
-const dbUri = process.env.MONGODB_URI;  // Récupère l'URI de connexion à MongoDB depuis .env
+const dbUri = process.env.MONGO_URI;
 
-// Vérifie si l'URI est bien définie, sinon, on arrête le processus
 if (!dbUri) {
-  console.error("La variable d'environnement MONGODB_URI est manquante !");
-  process.exit(1);  // Arrête l'exécution si l'URI n'est pas défini
+  console.error("La variable d'environnement MONGO_URI est manquante !");
+  process.exit(1);
 }
 
-// Connexion à MongoDB avec une gestion d'erreur avancée
-mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose
+  .connect(dbUri)
   .then(() => {
-    console.log('Connexion à la base de données réussie');
+    console.log("Connexion à la base de données réussie");
   })
   .catch((err) => {
-    console.error('Erreur de connexion à la base de données:', err.message);
+    console.error("Erreur de connexion à la base de données:", err.message);
   });

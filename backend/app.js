@@ -1,14 +1,16 @@
 const express = require("express");
-require('dotenv').config();
+require("dotenv").config();
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
-app.get('/', (req, res) => {
-  console.log('Request received');  // Ajoute des logs ici
-  res.send('Hello world');
-});
+// Déclare `app` ici AVANT de l'utiliser
+const app = express();
 
+app.get("/", (req, res) => {
+  console.log("Request received"); // Ajoute des logs ici
+  res.send("Hello world");
+});
 
 // Importation de la connexion à la base de données
 require("./models/connection");
@@ -18,8 +20,6 @@ const tripRouter = require("./routes/trip");
 const cartRouter = require("./routes/cart");
 const bookingsRouter = require("./routes/bookings");
 
-const app = express();
-
 // Configuration CORS
 const cors = require("cors");
 // app.use(
@@ -27,9 +27,6 @@ const cors = require("cors");
 //     origin: "https://tickethack-git-main-ginny-siixs-projects.vercel.app", // Remplace par l'URL de ton front-end
 //   })
 // );
-
-
-
 
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
