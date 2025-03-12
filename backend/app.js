@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+require('dotenv').config();  // Charge les variables d'environnement
+
 
 // Importation de la connexion à la base de données
 require("./models/connection");
@@ -21,14 +23,13 @@ app.use(
   })
 );
 
+
+
+
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-// Définir les répertoires statiques pour servir les fichiers
-app.use(express.static(path.join(__dirname, "front-end")));
-app.use(express.static(path.join(__dirname, "public")));
 
 // Utilisation des routeurs
 app.use("/trip", tripRouter);

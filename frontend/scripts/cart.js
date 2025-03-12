@@ -44,10 +44,10 @@ function displayCart() {
             </div>
           `;
 
-          total += cart.price; // Ajout au total
+          total += parseFloat(cart.price); // Convertir en nombre et ajouter au total
         });
 
-        totalPriceElement.textContent = `${total}€`; // Mise à jour du prix total
+        totalPriceElement.textContent = `${total.toFixed(2)}€`; // Mise à jour du prix total avec 2 décimales
         cartTotalSection.style.display = "block"; // Afficher la section total
       } else {
         cartContainer.innerHTML = "<p>Aucun trajet dans votre panier.</p>";
@@ -79,7 +79,7 @@ function removeFromCart(idTripDelete) {
 
 // Nouvelle fonction pour valider les billets et les transférer vers les réservations
 function validateBookings() {
-  fetch("https://tickethack-two.vercel.app/bookings/pay", {
+  fetch("https://tickethack-two.vercel.app/pay", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -92,7 +92,10 @@ function validateBookings() {
         localStorage.setItem("paymentInitiated", "true");
         window.location.href = "bookings.html"; // Ou mettre l'URL appropriée
       } else {
-        alert(data.error || "Une erreur est survenue lors de la validation des billets.");
+        alert(
+          data.error ||
+            "Une erreur est survenue lors de la validation des billets."
+        );
       }
     })
     .catch((error) => {
