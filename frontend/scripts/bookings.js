@@ -5,7 +5,7 @@ const showArchivedButton = document.getElementById("showArchivedButton");
 
 // Fonction pour afficher les réservations
 function displayBookings() {
-  fetch("http://localhost:3000/bookings")
+  fetch("tickethack-two.vercel.app/bookings")
     .then((response) => response.json())
     .then((data) => {
       if (data.length > 0) {
@@ -56,7 +56,7 @@ function displayBookings() {
 
 // Fonction pour archiver une réservation
 function archiveBooking(bookingId) {
-  fetch(`http://localhost:3000/bookings/archive/${bookingId}`, {
+  fetch(`tickethack-two.vercel.app/bookings/archive/${bookingId}`, {
     method: "PUT",
   })
     .then((response) => response.json())
@@ -132,7 +132,7 @@ function deleteArchivedBookings(ids) {
   });
 
   // Suppression des réservations côté serveur
-  fetch("http://localhost:3000/bookings/delete", {
+  fetch("tickethack-two.vercel.app/bookings/delete", {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

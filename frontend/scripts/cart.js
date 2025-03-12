@@ -10,7 +10,7 @@ function displayCart() {
   cartContainer.innerHTML = "";
   let total = 0; // Initialisation du prix total
 
-  fetch("http://localhost:3000/cart")
+  fetch("tickethack-two.vercel.app/cart")
     .then((response) => response.json())
     .then((data) => {
       if (data.result && data.cart.length > 0) {
@@ -63,7 +63,7 @@ function displayCart() {
 
 // Fonction pour supprimer un trajet du panier
 function removeFromCart(idTripDelete) {
-  fetch(`http://localhost:3000/cart/delete/${idTripDelete}`, {
+  fetch(`tickethack-two.vercel.app/cart/delete/${idTripDelete}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
@@ -79,7 +79,7 @@ function removeFromCart(idTripDelete) {
 
 // Nouvelle fonction pour valider les billets et les transférer vers les réservations
 function validateBookings() {
-  fetch("http://localhost:3000/bookings/pay", {
+  fetch("tickethack-two.vercel.app/bookings/pay", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
