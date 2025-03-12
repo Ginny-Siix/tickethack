@@ -15,6 +15,7 @@ var app = express();
 app.use(express.json()); // Ajoute ce middleware avant tes routes
 const cors = require('cors');
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'front-end')));
 
 app.use(logger('dev'));
 app.use(express.json());
