@@ -1,7 +1,19 @@
 const mongoose = require('mongoose');
+require('dotenv').config();  // Charge les variables d'environnement depuis le fichier .env
 
-const connectionString = 'mongodb+srv://sabrinaoulmane:ojznLRfqSxfUn5aq@cluster0.hahs6.mongodb.net/tickethack';
+const dbUri = process.env.MONGODB_URI;  // Récupère l'URI de connexion à MongoDB depuis .env
 
-mongoose.connect(connectionString, { connectTimeoutMS: 2000 })
-  .then(() => console.log('Database connected, bien joué !'))
-  .catch(error => console.error(error));
+
+if (!dbUri) {
+  console.error("La variable d'environnement MONGODB_URI est manquante !");
+  process.exit(1);  // Arrête l'exécution si l'URI n'est pas défini
+}
+
+// Connexion à MongoDB sans les options obsolètes
+mongoose.connect(dbUri)
+  .then(() => {
+    console.log('Connexion à la base de données réussie');
+  })
+  .catch((err) => {
+    console.error('Erreur de connexion à la base de données:', err);
+  });
