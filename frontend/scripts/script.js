@@ -28,7 +28,8 @@ document.getElementById("searchButton").addEventListener("click", function () {
 
   // Requête à l'API pour chercher les trajets correspondants
   fetch(
-    `https://tickethack-two.vercel.app/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`
+    `https://tickethack-two.vercel.app/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`,
+    { method: "GET" }
   )
     .then((response) => response.json())
     .then((data) => {
@@ -37,7 +38,7 @@ document.getElementById("searchButton").addEventListener("click", function () {
       if (data.result) {
         displayTrips(allTrips); // Affichage des trajets
       } else {
-        tripsContainer.innerHTML = `
+        tripsContainer.innerHTML = ` 
           <div class="no-trips">
             <img src="./images/notfound.png" alt="Illustration du train" class="no-trips-img">
             <p>Aucun trajet disponible</p>
@@ -66,10 +67,10 @@ function displayTrips(trips) {
 
     tripsContainer.innerHTML += `
       <div class="trip-item">
-        <p><strong></strong> ${trip.departure}</p>
-        <p><strong></strong> ${trip.arrival}</p>
-        <p><strong></strong> ${formattedTime}</p>
-        <p><strong></strong> ${trip.price} €</p>
+        <p><strong>Départ :</strong> ${trip.departure}</p>
+        <p><strong>Arrivée :</strong> ${trip.arrival}</p>
+        <p><strong>Heure :</strong> ${formattedTime}</p>
+        <p><strong>Prix :</strong> ${trip.price} €</p>
         <button class="add-to-cart" onclick="addToCart('${trip._id}')">Ajouter au panier</button>
       </div>`;
   });
@@ -77,7 +78,9 @@ function displayTrips(trips) {
 
 // Fonction pour ajouter un trajet au panier
 function addToCart(tripId) {
-  fetch(`https://tickethack-two.vercel.app/cart/add/${tripId}`, { method: "POST" })
+  fetch(`https://tickethack-two.vercel.app/cart/add/${tripId}`, {
+    method: "POST",
+  })
     .then((response) => response.json())
     .then((data) => {
       if (data.result) {

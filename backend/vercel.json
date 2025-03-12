@@ -1,0 +1,9 @@
+{
+    "routes": [
+      {
+        "src": "/trip/search",
+        "dest": "/api/trip/search"
+      }
+    ]
+  }
+  
