@@ -45,7 +45,7 @@ searchButton.addEventListener("click", function () {
       if (data.result) {
       
         allTrips = data.trips;
-        displayTrips(allTrips); // Affichage des trajets
+        displayTrips(allTrips); // Affichage des trajet s
       } else {
         tripsContainer.innerHTML = ` 
           <div class="no-trips">
