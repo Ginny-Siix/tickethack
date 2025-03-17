@@ -22,11 +22,7 @@ const bookingsRouter = require("./routes/bookings");
 
 // Configuration CORS
 const cors = require("cors");
-app.use(
-  cors({
-    origin: "https://tickethack-frontend-ashy-seven.vercel.app",
-  })
-);
+app.use(cors())
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
