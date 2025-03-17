@@ -6,6 +6,7 @@ const moment = require("moment"); // Import de moment.js pour la gestion des dat
 
 // GET - Afficher la liste des voyages en fonction des critères de recherche
 router.get("/search", async (req, res) => {
+  console.log("CC world")
   try {
     // Récupération des paramètres de la requête
     const { departure, arrival, date } = req.query;
