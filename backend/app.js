@@ -6,6 +6,8 @@ const logger = require("morgan");
 
 // Déclare `app` ici AVANT de l'utiliser
 const app = express();
+const cors = require("cors");
+app.use(cors())
 
 app.get("/", (req, res) => {
   console.log("Request received"); // Ajoute des logs ici
@@ -21,8 +23,6 @@ const cartRouter = require("./routes/cart");
 const bookingsRouter = require("./routes/bookings");
 
 // Configuration CORS
-const cors = require("cors");
-app.use(cors())
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
