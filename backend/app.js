@@ -10,11 +10,6 @@ const app = express();
 const cors = require("cors");
 app.use(cors())
 
-app.get("/", (req, res) => {
-  console.log("Request received"); // Ajoute des logs ici
-  res.send("Hello world");
-});
-
 // Importation de la connexion à la base de données
 require("./models/connection");
 

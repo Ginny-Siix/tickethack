@@ -5,8 +5,6 @@ const Cart = require("../models/carts");
 const Booking = require("../models/booking");
 
 // ROUTE POST - Valider les billets dans les réservations
-// ROUTE POST - Valider les billets dans les réservations
-// ROUTE POST - Valider les billets dans les réservations
 router.post("/pay", async (req, res) => {
   try {
     // Récupérer tous les trajets du panier
