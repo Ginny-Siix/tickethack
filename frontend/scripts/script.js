@@ -31,15 +31,8 @@ searchButton.addEventListener("click", function () {
 
   // Requête à l'API pour chercher les trajets correspondants
   fetch(
-    `https://tickethack-git-main-ginny-siixs-projects.vercel.app/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`,
-    { method: "GET" }
-  )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Erreur lors de la récupération des trajets.");
-      }
-      return response.json();
-    })
+    `https://tickethack-git-main-ginny-siixs-projects.vercel.app/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`)
+    .then(response => response.json())
     .then((data) => {
       console.log(data)
       if (data.result) {
