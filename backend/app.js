@@ -4,6 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
+
 // Déclare `app` ici AVANT de l'utiliser
 const app = express();
 const cors = require("cors");

@@ -5,6 +5,7 @@ const Trip = require("../models/trips"); // Import du modèle de trajet
 const moment = require("moment"); // Import de moment.js pour la gestion des dates
 
 router.get('/all', async function (req, res) {
+  console.log("salut")
   // Récupérer tous les trajets
   const trips = await Trip.find();
   // Si il y a des trajets
