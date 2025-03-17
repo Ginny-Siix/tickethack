@@ -31,7 +31,7 @@ searchButton.addEventListener("click", function () {
 
   // Requête à l'API pour chercher les trajets correspondants
   fetch(
-    `${apiUrl}/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`,
+    `https://tickethack-git-main-ginny-siixs-projects.vercel.app/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`,
     { method: "GET" }
   )
     .then((response) => {
@@ -41,7 +41,9 @@ searchButton.addEventListener("click", function () {
       return response.json();
     })
     .then((data) => {
+      console.log(data)
       if (data.result) {
+      
         allTrips = data.trips;
         displayTrips(allTrips); // Affichage des trajets
       } else {
