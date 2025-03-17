@@ -22,7 +22,7 @@ const tripRouter = require("./routes/trip");
 const cartRouter = require("./routes/cart");
 const bookingsRouter = require("./routes/bookings");
 
-// Configuration CORS
+
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

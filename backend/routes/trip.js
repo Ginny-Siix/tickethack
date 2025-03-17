@@ -4,6 +4,18 @@ require("../models/connection"); // Import de la connexion à la base de donnée
 const Trip = require("../models/trips"); // Import du modèle de trajet
 const moment = require("moment"); // Import de moment.js pour la gestion des dates
 
+router.get('/', async function (req, res) {
+  // Récupérer tous les trajets
+  const trips = await Trip.find();
+  // Si il y a des trajets
+  if (trips.length > 0) {
+    res.json({ result: true, trips: trips });
+  } else {
+    res.json({ result: false, error: "No trips found" });
+  }
+});
+
+
 // GET - Afficher la liste des voyages en fonction des critères de recherche
 router.get("/search", async (req, res) => {
   console.log("CC world")
