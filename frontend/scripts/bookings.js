@@ -4,7 +4,7 @@ const archivedContainer = document.getElementById("archivedContainer");
 const showArchivedButton = document.getElementById("showArchivedButton");
 
 // URL de l'API
-const apiUrl = "https://tickethack-two.vercel.app"; // Utilise la bonne adresse de l'API pour ton projet
+const apiUrl = "https://tickethack-back404.vercel.app"; // Adresse de ton back-end
 
 // Fonction pour afficher les réservations
 function displayBookings() {
