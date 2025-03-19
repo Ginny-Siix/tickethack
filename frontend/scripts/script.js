@@ -1,5 +1,5 @@
 // Définir l'URL de l'API
-const apiUrl = "https://tickethack-git-main-ginny-siixs-projects.vercel.app"; // Adresse de ton back-end
+const apiUrl = "https://tickethack-back404.vercel.app"; // Adresse de ton back-end
 
 // Sélection des éléments HTML
 const tripsContainer = document.getElementById("results-card");
@@ -31,12 +31,12 @@ searchButton.addEventListener("click", function () {
 
   // Requête à l'API pour chercher les trajets correspondants
   fetch(
-    `https://tickethack-git-main-ginny-siixs-projects.vercel.app/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`)
-    .then(response => response.json())
+    `https://tickethack-back404.vercel.app/trip/search?departure=${departureValue}&arrival=${arrivalValue}&date=${dateValue}`
+  )
+    .then((response) => response.json())
     .then((data) => {
-      console.log(data)
+      console.log(data);
       if (data.result) {
-      
         allTrips = data.trips;
         displayTrips(allTrips); // Affichage des trajet s
       } else {
