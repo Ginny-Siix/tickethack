@@ -82,7 +82,7 @@ function removeFromCart(idTripDelete) {
 
 // Nouvelle fonction pour valider les billets et les transférer vers les réservations
 function validateBookings() {
-  fetch(`${apiUrl}/pay`, {
+  fetch(`${apiUrl}/bookings/pay`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
